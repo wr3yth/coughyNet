@@ -1,0 +1,6 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "my-registry",
+  "homepage": "https://mycomponents.com",
+  "items": []
+}
