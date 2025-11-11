@@ -1,0 +1,175 @@
+---
+import Hamburger from "./Hamburger.astro";
+import ModeToggle from "./ModeToggle.astro";
+
+const navLinks = [
+  ["Home", "/"],
+  ["Wiki", "/wiki"],
+  ["Blog", "/blog"],
+  ["Fiction", "/fiction"],
+  ["Poetry", "/poetry"],
+  ["Projects", "/projects"],
+  ["Partners", "/partners"],
+  ["About", "/about"],
+];
+---
+<header class="fixed top-3 inset-x-0 z-50 pointer-events-none text-white font-medium tracking-tight">
+  <div id="nav-grid" class="pointer-events-auto">
+    <!-- Left -->
+    <a id="brand" href="/" class="capsule edge">
+      <span class="brand-text">Coughy.net</span>
+    </a>
+
+    <!-- Center -->
+    <nav id="main" class="capsule mid" aria-label="Main Navigation">
+      <ul class="mid-list">
+        {navLinks.map(([label, href]) => (
+          <li>
+            <a href={href} class="mid-link">{label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Right -->
+    <div id="util" class="capsule edge">
+      <ModeToggle />
+      <Hamburger />
+    </div>
+  </div>
+</header>
+
+<style>
+:root {
+  --capsule-h: 3.1rem;
+  --edge-margin: clamp(1rem, 3vw, 2.5rem);
+  --merge-start: 1100px;
+  --merge-end: 800px;
+}
+
+/* Base layout */
+#nav-grid {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto);
+  align-items: center;
+  gap: 0;
+  padding-inline: var(--edge-margin);
+  height: var(--capsule-h);
+}
+
+/* Capsules share one style */
+.capsule {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--capsule-h);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  border-radius: 9999px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  transition: border-radius 0.5s ease, background 0.4s ease;
+}
+
+.edge {
+  padding-inline: clamp(0.9rem, 1.2vw, 1.2rem);
+}
+.brand-text {
+  font-weight: 600;
+  font-size: clamp(1.08rem, 1.35vw, 1.45rem);
+  white-space: nowrap;
+}
+
+/* Middle capsule base */
+.mid {
+  justify-self: center;
+  width: 100%;
+  max-width: 900px;
+  margin-inline: auto;
+  padding-inline: 1.4rem;
+  transition:
+    max-width 0.7s ease,
+    border-radius 0.5s ease,
+    padding-inline 0.7s ease,
+    opacity 0.4s ease;
+}
+
+/* Dynamic content */
+.mid-list {
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.6rem, 1.6vw, 2rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mid-link {
+  position: relative;
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.2s ease;
+}
+.mid-link:hover {
+  color: white;
+}
+.mid-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -3px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+.mid-link:hover::after {
+  width: 66%;
+}
+
+/* ----------------------------------
+   Merge animation (variable-based)
+---------------------------------- */
+@media (max-width: 1200px) {
+  :root {
+    --merge-progress: calc(
+      (var(--merge-start) - 100vw) / (var(--merge-start) - var(--merge-end))
+    );
+  }
+
+  /* Clamp between 0 and 1 */
+  @supports (width: clamp(0px, var(--merge-progress, 1) * 100%, 100%)) {
+    .mid {
+      /* Single, smooth variable controls everything */
+      max-width: calc(900px + 300px * var(--merge-progress));
+      padding-inline: calc(1.4rem - 0.6rem * var(--merge-progress));
+      border-radius: calc(9999px * (1 - var(--merge-progress)));
+    }
+    #brand {
+      border-top-right-radius: calc(9999px * (1 - var(--merge-progress)));
+      border-bottom-right-radius: calc(9999px * (1 - var(--merge-progress)));
+    }
+    #util {
+      border-top-left-radius: calc(9999px * (1 - var(--merge-progress)));
+      border-bottom-left-radius: calc(9999px * (1 - var(--merge-progress)));
+    }
+  }
+}
+
+/* Fully merged */
+@media (max-width: 800px) {
+  .mid {
+    max-width: 0;
+    opacity: 0;
+    pointer-events: none;
+    padding-inline: 0;
+  }
+  #brand,
+  #util {
+    border-radius: 9999px;
+    transition: border-radius 0.6s ease;
+  }
+}
+</style>
