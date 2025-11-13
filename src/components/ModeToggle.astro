@@ -1,41 +1,30 @@
----
-/*
-  ThemeToggle.astro
-  - Moon shows in light mode, Sun shows in dark mode
-  - Smooth transitions, correct rotations
-  - Saves user preference
-  - Fully framework-free
-*/
----
-
 <button
   id="theme-toggle"
   class="relative flex items-center justify-center w-10 h-10 rounded-full
-         bg-white/10 hover:bg-white/20 transition-all duration-300
-         outline-none focus:outline-none focus:ring-0"
+          hover:bg-white/20 transition-all duration-300 drop-shadow-xs/30 hover:scale-110"
   aria-label="Toggle theme"
   title="Toggle dark mode"
 >
-  <!-- 🌙 Moon icon (visible in light mode) -->
+  <!-- Moon (light mode icon) -->
   <svg
     id="icon-moon"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill="currentColor"
-    class="absolute w-6 h-6 text-yellow-300
+    class="absolute w-6 h-6 text-yellow-300 
            opacity-100 scale-100 rotate-0
            transition-all duration-500"
   >
     <path d="M12 1.992a10 10 0 1 0 9.236 13.838c.341 -.82 -.476 -1.644 -1.298 -1.31a6.5 6.5 0 0 1 -6.864 -10.787l.077 -.08c.551 -.63 .113 -1.653 -.758 -1.653h-.266l-.068 -.006l-.06 -.002z" />
   </svg>
 
-  <!-- ☀️ Sun icon (visible in dark mode) -->
+  <!-- Sun (dark mode icon) -->
   <svg
     id="icon-sun"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill="currentColor"
-    class="absolute w-6 h-6 text-yellow-300
+    class="absolute w-6 h-6 text-yellow-300 
            opacity-0 scale-100 rotate-90
            transition-all duration-500"
   >
@@ -51,7 +40,7 @@
   </svg>
 </button>
 
-<script>
+<script >
   // @ts-nocheck
   document.addEventListener("DOMContentLoaded", () => {
     const root = document.documentElement;
@@ -59,25 +48,25 @@
     const sun = document.getElementById("icon-sun");
     const moon = document.getElementById("icon-moon");
 
-    if (!btn || !sun || !moon) return console.error("ThemeToggle icons not found");
+    if (!btn || !sun || !moon) {
+      console.error("ThemeToggle icons not found");
+      return;
+    }
 
-    const saved = localStorage.getItem("theme");
-    const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const theme = saved || (systemDark ? "dark" : "light");
-
-    applyTheme(theme);
+    // Initial theme from FOUC script
+    const isDark = root.classList.contains("dark");
+    applyTheme(isDark ? "dark" : "light");
 
     btn.addEventListener("click", () => {
       const newTheme = root.classList.contains("dark") ? "light" : "dark";
+      root.classList.toggle("dark", newTheme === "dark");
       applyTheme(newTheme);
       localStorage.setItem("theme", newTheme);
     });
 
     function applyTheme(theme) {
       const isDark = theme === "dark";
-      root.classList.toggle("dark", isDark);
 
-      // Corrected: Sun appears in dark mode, Moon in light mode
       sun.style.opacity = isDark ? "1" : "0";
       sun.style.transform = isDark
         ? "scale(1) rotate(0deg)"
@@ -89,4 +78,22 @@
         : "scale(1) rotate(0deg)";
     }
   });
+<script>
+  (function () {
+    const stored = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isDark = stored === "dark" || (!stored && prefersDark);
+
+    // Apply dark class immediately
+    if (isDark) document.documentElement.classList.add("dark");
+
+    // Set correct icon states BEFORE the HTML becomes visible
+    const css = `
+      #icon-sun { opacity: ${isDark ? "1" : "0"}; transform: ${isDark ? "scale(1) rotate(0deg)" : "scale(0.5) rotate(90deg)"}; }
+      #icon-moon { opacity: ${isDark ? "0" : "1"}; transform: ${isDark ? "scale(0.5) rotate(-90deg)" : "scale(1) rotate(0deg)"}; }
+    `;
+    const tag = document.createElement("style");
+    tag.innerHTML = css;
+    document.head.appendChild(tag);
+  })();
 </script>

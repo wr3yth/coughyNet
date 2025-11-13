@@ -13,163 +13,282 @@ const navLinks = [
   ["About", "/about"],
 ];
 ---
-<header class="fixed top-3 inset-x-0 z-50 pointer-events-none text-white font-medium tracking-tight">
-  <div id="nav-grid" class="pointer-events-auto">
-    <!-- Left -->
-    <a id="brand" href="/" class="capsule edge">
-      <span class="brand-text">Coughy.net</span>
+
+<!-- ===================================
+     HEADER — Main Navigation Bar
+     =================================== -->
+<header
+  class="fixed top-3 inset-x-0 z-50 text-neutral-700 dark:text-white  font-medium tracking-tight transition-all duration-500 ease-in-out select-none"
+>
+  <div
+    class="mx-auto flex items-center justify-between gap-2 px-[clamp(1rem,3vw,2.5rem)]
+           pointer-events-auto transition-all duration-500 ease-in-out w-full"
+  >
+    <!-- Brand -->
+    <a
+      href="/"
+      class="flex items-center justify-center h-[3.1rem]
+             px-[clamp(0.9rem,1.2vw,1.2rem)] rounded-full
+             backdrop-blur-xl shadow-lg 
+             hover:bg-white/30 dark:hover:bg-black/30 transition-all duration-300 ease-out shrink-0"
+    >
+      <span class="font-semibold text-[clamp(1.08rem,1.35vw,1.45rem)] whitespace-nowrap hover:scale-105 duration-500 ">
+        Coughy.net
+      </span>
     </a>
 
-    <!-- Center -->
-    <nav id="main" class="capsule mid" aria-label="Main Navigation">
-      <ul class="mid-list">
+    <!-- Nav Links -->
+    <nav
+      class="relative flex items-center justify-center h-[3.1rem]
+             px-[clamp(0.6rem,1.5vw,1.5rem)] flex-1 mx-auto
+             max-w-[900px] rounded-full 
+             bg-[rgba(250,250,250,0.15)]  hover:bg-white/30 dark:hover:bg-black/30
+              backdrop-blur-xl shadow-lg shadow-black/10
+              transition-all duration-300 ease-in-out
+             min-w-0 overflow-hidden "
+      aria-label="Main Navigation"
+    >
+        
+      <ul
+        class="flex justify-center items-center flex-nowrap
+               gap-[clamp(0.3rem,1.2vw,2rem)] list-none m-0 p-0"
+      >
         {navLinks.map(([label, href]) => (
-          <li>
-            <a href={href} class="mid-link">{label}</a>
+          <li class="shrink">
+            <a
+              href={href}
+              class="relative inline-block px-[clamp(0.4rem,0.8vw,0.8rem)] py-1
+                     text-neutral/700 hover:text-white transition-all duration-300 ease-out
+                     after:absolute after:left-1/2 after:-bottom-1 after:w-0 after:h-0.5
+                     after:rounded-full after:bg-linear-to-r after:from-blue-400 after:to-purple-400 
+                     after:transition-all after:duration-400 after:ease-out
+                     hover:after:w-2/3 hover:after:-translate-x-1/2 hover:scale-125"
+            >
+              {label}
+            </a>
           </li>
         ))}
       </ul>
     </nav>
 
-    <!-- Right -->
-    <div id="util" class="capsule edge">
+    <!-- Phantom Spacer -->
+    <div aria-hidden="true" class="h-[3.1rem] w-[min(8rem,15vw)] shrink-0"></div>
+  </div>
+</header>
+<style is:global>
+  #utility-bg.fade-out {
+    opacity: 0;
+  }
+
+  #utility-bg.expanded {
+    width: 5rem;
+     transform: translateX(-5rem) scale(0.9)
+  }
+
+  #mode-wrapper.shift-left {
+    will-change: transform;
+  }
+
+  @media (max-width: 600px) {
+    #utility-bar {
+      right: 1rem;
+    }
+  }
+
+  /* 🌙 Fade out middle navbar on small screens */
+  @media (max-width: 768px) {
+    header nav {
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+    }
+  }
+
+@media (min-width: 769px) {
+  header nav {
+    transition: opacity 0.4s ease, transform 0.4s ease, background-color 0.3s ease-in-out;
+    /* Add background-color here ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ */
+  }
+}
+/* 🌙 Fade out middle navbar on small screens */
+@media (max-width: 768px) {
+  header nav {
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+    /* Add this to disable tab navigation */
+    visibility: hidden;
+  }
+  
+  /* Also disable the individual links */
+  header nav a {
+    visibility: hidden;
+  }
+}
+/* Sidebar closed - not tabbable */
+#sidebar-overlay.translate-x-full {
+  pointer-events: none;
+}
+
+/* Sidebar open - tabbable */
+#sidebar-overlay.translate-x-0 {
+  pointer-events: auto;
+}
+</style>
+
+<!-- ===================================
+     UTILITY BAR — pixel-perfect alignment with sidebar edge
+     =================================== -->
+<div
+  id="utility-bar"
+  class="fixed top-3 right-8 z-58 rounded-full 
+         flex items-center justify-center h-[3.1rem]
+         transition-all duration-500 ease-in-out group"
+>
+  <!-- Capsule background with group hover -->
+  <div
+    id="utility-bg"
+    class="absolute left-1/2 -translate-x-1/2 rounded-full
+           bg-white/10 group-hover:bg-white/30 dark:group-hover:bg-black/30
+           backdrop-blur-xl shadow-lg shadow-black/10
+           transition-all duration-200 ease-in-out
+           opacity-100 w-32 h-full z-60"
+  ></div>
+
+  <!-- Icons -->
+  <div
+    id="utility-content" 
+    class="relative z-70 flex items-center gap-2 px-4
+           transition-all duration-500 ease-in-out"
+  >
+    <div id="mode-wrapper" class="transition-transform duration-500 ease-in-out">
       <ModeToggle />
+    </div>
+    <div id="menu-wrapper">
       <Hamburger />
     </div>
   </div>
-</header>
+</div>
 
-<style>
-:root {
-  --capsule-h: 3.1rem;
-  --edge-margin: clamp(1rem, 3vw, 2.5rem);
-  --merge-start: 1100px;
-  --merge-end: 800px;
-}
 
-/* Base layout */
-#nav-grid {
-  display: grid;
-  grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto);
-  align-items: center;
-  gap: 0;
-  padding-inline: var(--edge-margin);
-  height: var(--capsule-h);
-}
 
-/* Capsules share one style */
-.capsule {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: var(--capsule-h);
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(12px);
-  border-radius: 9999px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
-  transition: border-radius 0.5s ease, background 0.4s ease;
-}
 
-.edge {
-  padding-inline: clamp(0.9rem, 1.2vw, 1.2rem);
-}
-.brand-text {
-  font-weight: 600;
-  font-size: clamp(1.08rem, 1.35vw, 1.45rem);
-  white-space: nowrap;
-}
 
-/* Middle capsule base */
-.mid {
-  justify-self: center;
-  width: 100%;
-  max-width: 900px;
-  margin-inline: auto;
-  padding-inline: 1.4rem;
-  transition:
-    max-width 0.7s ease,
-    border-radius 0.5s ease,
-    padding-inline 0.7s ease,
-    opacity 0.4s ease;
-}
 
-/* Dynamic content */
-.mid-list {
-  display: flex;
-  justify-content: center;
-  gap: clamp(0.6rem, 1.6vw, 2rem);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.mid-link {
-  position: relative;
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  color: rgba(255, 255, 255, 0.9);
-  transition: color 0.2s ease;
-}
-.mid-link:hover {
-  color: white;
-}
-.mid-link::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -3px;
-  transform: translateX(-50%);
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #60a5fa, #a78bfa);
-  border-radius: 999px;
-  transition: width 0.25s ease;
-}
-.mid-link:hover::after {
-  width: 66%;
-}
+<!-- ===================================
+     SIDEBAR + BACKDROP
+     =================================== -->
+  <div
+    id="sidebar-backdrop"
+    class="fixed inset-0 bg-black/40 backdrop-blur-md opacity-0 pointer-events-none
+           transition-opacity duration-500 z-55"
+  >
+  <aside
+    id="sidebar-overlay"
+    class="select-none absolute top-0 right-0 w-[min(80vw,300px)] h-full bg-white/10 dark:bg-black/40
+           border-l border-white/20 backdrop-blur-2xl backdrop-saturate-150 shadow-xl
+           flex flex-col items-center justify-center gap-6 text-white text-lg font-medium
+           transform translate-x-full transition-transform duration-500 z-60"
+    inert
+    aria-hidden="true"
+  >
+    <ul class="flex flex-col gap-6 list-none m-0 p-0">
+      {navLinks.map(([label, href]) => (
+        <li>
+          <a href={href} class="hover:text-blue-300 transition">
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
 
-/* ----------------------------------
-   Merge animation (variable-based)
----------------------------------- */
-@media (max-width: 1200px) {
-  :root {
-    --merge-progress: calc(
-      (var(--merge-start) - 100vw) / (var(--merge-start) - var(--merge-end))
-    );
+<!-- ===================================
+     SCRIPT — Sidebar Logic
+     =================================== -->
+<script is:inline>
+document.addEventListener("DOMContentLoaded", () => {
+  const hamburger =
+    document.querySelector("button[aria-label='Menu']") ||
+    document.querySelector("button[aria-label='Toggle menu']") ||
+    document.querySelector("#hamburger") ||
+    document.querySelector(".hamburger-btn");
+
+  const sidebar = document.getElementById("sidebar-overlay");
+  const backdrop = document.getElementById("sidebar-backdrop");
+  const utilityBg = document.getElementById("utility-bg");
+  const modeWrapper = document.getElementById("mode-wrapper");
+
+  if (!(hamburger && sidebar && backdrop && utilityBg && modeWrapper)) {
+    console.warn("[Navbar] Missing elements!");
+    return;
   }
 
-  /* Clamp between 0 and 1 */
-  @supports (width: clamp(0px, var(--merge-progress, 1) * 100%, 100%)) {
-    .mid {
-      /* Single, smooth variable controls everything */
-      max-width: calc(900px + 300px * var(--merge-progress));
-      padding-inline: calc(1.4rem - 0.6rem * var(--merge-progress));
-      border-radius: calc(9999px * (1 - var(--merge-progress)));
+  const computeShift = () => {
+    const sidebarWidth = sidebar.offsetWidth || 300; // fixed fallback
+    // Move the toggle roughly the same distance as sidebar width minus a little buffer
+    // so that the toggle aligns visually with the sidebar's inner edge
+    const shiftDistance = -(sidebarWidth / 2.4); // tweak multiplier for balance
+    return shiftDistance;
+  };
+
+const openSidebar = () => {
+  sidebar.classList.remove("translate-x-full");
+  sidebar.classList.add("translate-x-0");
+  backdrop.classList.remove("opacity-0", "pointer-events-none");
+  utilityBg.classList.add("fade-out", "expanded");
+  
+  // Remove inert attribute to make tabbable
+  sidebar.removeAttribute("inert");
+  sidebar.setAttribute("aria-hidden", "false");
+  
+  const shift = computeShift();
+  modeWrapper.style.transform = `translateX(${shift}px)`;
+  
+  // Focus first link after transition
+  setTimeout(() => {
+    const firstLink = sidebar.querySelector('a');
+    if (firstLink) {
+      firstLink.focus();
+      console.log('Focused first link:', firstLink); // Debug
     }
-    #brand {
-      border-top-right-radius: calc(9999px * (1 - var(--merge-progress)));
-      border-bottom-right-radius: calc(9999px * (1 - var(--merge-progress)));
-    }
-    #util {
-      border-top-left-radius: calc(9999px * (1 - var(--merge-progress)));
-      border-bottom-left-radius: calc(9999px * (1 - var(--merge-progress)));
-    }
-  }
-}
+  }, 300);
+};
 
-/* Fully merged */
-@media (max-width: 800px) {
-  .mid {
-    max-width: 0;
-    opacity: 0;
-    pointer-events: none;
-    padding-inline: 0;
-  }
-  #brand,
-  #util {
-    border-radius: 9999px;
-    transition: border-radius 0.6s ease;
-  }
-}
-</style>
+const closeSidebar = () => {
+  sidebar.classList.add("translate-x-full");
+  sidebar.classList.remove("translate-x-0");
+  backdrop.classList.add("opacity-0", "pointer-events-none");
+  utilityBg.classList.remove("fade-out", "expanded");
+  
+  // Add inert attribute to remove from tab order
+  sidebar.setAttribute("inert", "");
+  sidebar.setAttribute("aria-hidden", "true");
+  modeWrapper.style.transform = "";
+};
+
+  hamburger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isOpen = sidebar.classList.contains("translate-x-0");
+    isOpen ? closeSidebar("hamburger") : openSidebar();
+  });
+
+  backdrop.addEventListener("click", (e) => {
+    if (e.target === backdrop) closeSidebar("backdrop");
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeSidebar("ESC");
+  });
+
+  window.addEventListener("resize", () => {
+    if (sidebar.classList.contains("translate-x-0")) {
+      const shift = computeShift();
+      modeWrapper.style.transform = `translateX(${shift}px)`;
+    }
+  });
+});
+
+
+</script>
+

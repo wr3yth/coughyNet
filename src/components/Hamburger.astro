@@ -7,7 +7,7 @@
 <button
   id="menu-toggle"
   class="relative flex items-center justify-center w-10 h-10
-        rounded-full bg-white/10 hover:bg-white/20  shadow-inner
+        rounded-full hover:bg-white/20   drop-shadow hover:scale-110
         transition-all duration-300 pointer-events-auto active:scale-95"
   
   aria-label="Toggle menu"
@@ -15,16 +15,16 @@
 >
   <!-- Lines -->
   <span
-    class="block absolute w-5 h-0.5 bg-white rounded transition-transform duration-300 ease-in-out origin-center"
+    class="block absolute w-5 h-0.5 bg-neutral-900 dark:bg-white rounded transition-transform-color duration-300 ease-in-out origin-center shadow-inner"
     id="line-top"
     style="transform: translateY(-6px);"
   ></span>
   <span
-    class="block absolute w-5 h-0.5 bg-white rounded transition-opacity duration-200 ease-in-out origin-center"
+    class="block absolute w-5 h-0.5 bg-neutral-900 dark:bg-white rounded transition-opacity-color duration-300 ease-in-out origin-center shadow-inner"
     id="line-mid"
   ></span>
   <span
-    class="block absolute w-5 h-0.5 bg-white rounded transition-transform duration-300 ease-in-out origin-center"
+    class="block absolute w-5 h-0.5 bg-neutral-900 dark:bg-white rounded transition-transform-color duration-300 ease-in-out origin-center shadow-inner"
     id="line-bot"
     style="transform: translateY(6px);"
   ></span>

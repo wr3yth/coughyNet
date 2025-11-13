@@ -8,7 +8,8 @@ const { pageTitle } = Astro.props;
 
 <html lang="en">
     <head>
-      <script is:inline>
+    <!--
+     <script is:inline>
         // Avoid flash of wrong theme before JS loads
         const saved = localStorage.getItem('theme');
         const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -16,7 +17,7 @@ const { pageTitle } = Astro.props;
         if (theme === 'dark') {
           document.documentElement.classList.add('dark');
         }
-      </script>
+      </script> -->
     </head>
     
     <body>
@@ -24,9 +25,29 @@ const { pageTitle } = Astro.props;
         <Header />
         <h1>{pageTitle}</h1>
         <slot />
-        <Footer />
+      <!--
         <script>
             import "../scripts/menu.js";
         </script>
+       -->
     </body>
 </html>
+
+<!--
+  <a
+    href="https://instagram.com/pdc.ali"
+    target="_blank"
+    class="text-neutral-700 dark:text-white hover:text-from-[#833ab4] via-[#fd1d1d] to-[#fcb045] transition-all duration-300 hover:scale-150"
+    aria-label="Instagram"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M16 3a5 5 0 0 1 5 5v8a5 5 0 0 1 -5 5h-8a5 5 0 0 1 -5 -5v-8a5 5 0 0 1 5 -5zm-4 5a4 4 0 0 0 -3.995 3.8l-.005 .2a4 4 0 1 0 4 -4m4.5 -1.5a1 1 0 0 0 -.993 .883l-.007 .127a1 1 0 0 0 1.993 .117l.007 -.127a1 1 0 0 0 -1 -1" />
+    </svg>
+  </a>
+ -->
