@@ -1,39 +1,171 @@
 ---
+/* FINAL FIXED VERSION — SSR initial theme + dual layers + no flash */
 
+let initialTheme = "light";
+const cookieTheme = Astro.cookies.get("theme")?.value;
+
+if (cookieTheme === "dark") initialTheme = "dark";
 ---
 
 <style>
-    html::before,
-    html::after {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        z-index: -1;
-        transition: opacity 0.25s ease-in-out;
-        pointer-events: none;
-    }
+  .layer-light,
+  .layer-dark {
+    transition: opacity 0.45s ease-in-out;
+  }
 
-    html::before {
-        background-image: url(/src/assets/backgrounds/bwca-day.png);
-        opacity: 1;
-    }
+  /* Initial theme is applied BEFORE paint using SSR */
+  #bg[data-theme="light"] .layer-light { opacity: 1; }
+  #bg[data-theme="light"] .layer-dark  { opacity: 0; }
 
-    html.dark::before {
-        opacity: 0;
-    }
+  #bg[data-theme="dark"] .layer-light { opacity: 0; }
+  #bg[data-theme="dark"] .layer-dark  { opacity: 1; }
 
-    html::after {
-        background-image: url(/src/assets/backgrounds/bwca-night.png);
-        opacity: 0;
-    }
-
-    html.dark::after {
-        opacity: 1;
-    }
+  svg [data-depth] {
+    transition: transform 0.15s ease-out;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
 </style>
+
+<div
+  id="bg"
+  data-theme={initialTheme}
+  class="fixed inset-0 w-full h-full overflow-hidden -z-10 pointer-events-none"
+>
+
+  <svg
+    class="absolute inset-0 w-full h-full"
+    viewBox="0 0 1440 900"
+    preserveAspectRatio="xMidYMid slice"
+  >
+
+    <!-- SKY -->
+    <g data-depth="0.05">
+
+      <!-- LIGHT -->
+      <g class="layer-light">
+        <defs>
+          <linearGradient id="skyLight" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e2f1ff" />
+            <stop offset="100%" stop-color="#8cc4ff" />
+          </linearGradient>
+        </defs>
+        <rect width="1440" height="900" fill="url(#skyLight)" />
+      </g>
+
+      <!-- DARK -->
+      <g class="layer-dark">
+        <defs>
+          <linearGradient id="skyDark" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#050b25" />
+            <stop offset="100%" stop-color="#1a2751" />
+          </linearGradient>
+        </defs>
+        <rect width="1440" height="900" fill="url(#skyDark)" />
+      </g>
+
+    </g>
+
+    <!-- FAR -->
+    <g data-depth="0.12">
+
+      <path
+        class="layer-light"
+        d="M0 450 Q300 380 600 430 T1200 420 T1440 440 L1440 900 0 900 Z"
+        fill="#b3d4ff"
+      />
+
+      <path
+        class="layer-dark"
+        d="M0 450 Q300 380 600 430 T1200 420 T1440 440 L1440 900 0 900 Z"
+        fill="#111b3a"
+      />
+
+    </g>
+
+    <!-- MID -->
+    <g data-depth="0.2">
+
+      <path
+        class="layer-light"
+        d="M0 520 Q200 470 450 510 T950 520 T1440 500 L1440 900 0 900 Z"
+        fill="#8ab7f5"
+      />
+
+      <path
+        class="layer-dark"
+        d="M0 520 Q200 470 450 510 T950 520 T1440 500 L1440 900 0 900 Z"
+        fill="#141f3f"
+      />
+
+    </g>
+
+    <!-- WATER -->
+    <g data-depth="0.25">
+
+      <rect class="layer-light" x="0" y="540" width="1440" height="360" fill="#a4d8ff" />
+
+      <rect class="layer-dark" x="0" y="540" width="1440" height="360" fill="#0b1732" />
+
+    </g>
+
+    <!-- FOREGROUND -->
+    <g data-depth="0.35">
+
+      <path
+        class="layer-light"
+        d="M0 580 Q150 540 260 580 T520 600 T800 590 T1100 610 T1440 580 L1440 900 0 900 Z"
+        fill="#4a7cc2"
+      />
+
+      <path
+        class="layer-dark"
+        d="M0 580 Q150 540 260 580 T520 600 T800 590 T1100 610 T1440 580 L1440 900 0 900 Z"
+        fill="#050816"
+      />
+
+    </g>
+
+  </svg>
+</div>
+
+<script>
+  const bg = document.getElementById("bg");
+  const layers = bg.querySelectorAll("[data-depth]");
+
+  /* PARALLAX */
+  function scrollParallax() {
+    const y = window.scrollY;
+    layers.forEach(el => {
+      const d = parseFloat(el.dataset.depth);
+      el.style.transform = `translateY(${y * d * -0.25}px)`;
+    });
+  }
+  window.addEventListener("scroll", scrollParallax, { passive: true });
+  scrollParallax();
+
+  window.addEventListener("mousemove", e => {
+    const x = e.clientX / window.innerWidth - 0.5;
+    const y = e.clientY / window.innerHeight - 0.5;
+    layers.forEach(el => {
+      const d = parseFloat(el.dataset.depth);
+      el.style.transform = `translate(${x * d * -20}px, ${y * d * -10}px)`;
+    });
+  });
+
+  /* THEME SWITCH (client side) */
+  const observer = new MutationObserver(() => {
+    const dark = document.documentElement.classList.contains("dark");
+    const newTheme = dark ? "dark" : "light";
+
+    bg.dataset.theme = newTheme;
+
+    /* Store theme for SSR next refresh */
+    document.cookie = `theme=${newTheme}; Path=/; SameSite=Lax; Max-Age=31536000`;
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+</script>
