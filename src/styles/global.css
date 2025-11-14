@@ -117,3 +117,9 @@
     @apply bg-background text-foreground;
   }
 }
+.astro-code.github-dark,
+pre.astro-code.github-dark,
+code.astro-code.github-dark {
+  color: inherit !important;
+
+}

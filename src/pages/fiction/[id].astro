@@ -1,0 +1,22 @@
+---
+import { getCollection, render } from "astro:content";
+import FictionLayout from "../../layouts/FictionLayout.astro";
+
+export async function getStaticPaths() {
+  const stories = await getCollection("fiction");
+  return stories.map(entry => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<FictionLayout frontmatter={entry.data}>
+
+
+  <Content />
+
+</FictionLayout>

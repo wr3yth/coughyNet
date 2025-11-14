@@ -1,0 +1,88 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+const { frontmatter } = Astro.props;
+---
+
+<BaseLayout>
+
+  <div class="fiction-content fiction-wrapper mx-auto max-w-3xl px-6 py-12">
+      <!-- 📌 Breadcrumbs -->
+    <nav class="text-sm mb-6 opacity-80 ">
+      <a href="/fiction" class="hover:underline">Fiction</a>
+      <span class="mx-2">/</span>
+      <span>{frontmatter.title}</span>
+    </nav>
+
+    <!-- Title -->
+    <h1 class="text-3xl font-semibold mb-4 tracking-tight align-middle">
+      {frontmatter.title}
+    </h1>
+
+    <!-- Description -->
+    {frontmatter.description && (
+      <p class="opacity-70 mb-6">{frontmatter.description}</p>
+    )}
+
+    <!-- Date -->
+    {frontmatter.published && (
+      <p class="text-sm opacity-50 mb-10">
+        {frontmatter.published.toLocaleDateString()}
+      </p>
+    )}
+
+    <!-- Story Body -->
+    <article
+      class="prose dark:prose-invert max-w-none
+             bg-black/10 dark:bg-white/5 backdrop-blur-xl
+             rounded-xl p-6 sm:p-10 leading-relaxed"
+    >
+      <slot />
+    </article>
+
+  </div>
+
+</BaseLayout>
+
+<style is:global>
+  /* Increase realism for fiction text */
+  .fiction-wrapper .prose p {
+    margin-top: 1.15rem;
+    margin-bottom: 1.15rem;
+    text-indent: 1.5rem;
+  }
+
+  /* Do not indent after headings */
+  .fiction-wrapper .prose h1 + p,
+  .fiction-wrapper .prose h2 + p {
+    text-indent: 0;
+  }
+
+  /* Dialogue lines starting with “–” should NOT indent */
+  .fiction-wrapper .prose p:has(> strong:first-child),
+  .fiction-wrapper .prose p:has(> span:first-child),
+  .fiction-wrapper .prose p:has(> em:first-child),
+  .fiction-wrapper .prose p:where(:first-child) {
+    text-indent: 0;
+  }
+  pre {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif !important;
+  white-space: pre-wrap !important;
+}
+.fiction-content ul,
+.fiction-content li {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: inherit !important;
+}
+
+.fiction-content ul li::marker {
+  display: none !important;
+}
+
+</style>

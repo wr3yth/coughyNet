@@ -1,13 +1,24 @@
 ---
 import Background from "../components/Astrogen.astro";
 import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
+
 import "../styles/global.css";
 const { pageTitle } = Astro.props;
 ---
 
 <html lang="en" class="transition-none">
+  
   <head>
+      <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <slot name="head" />
+
+  <!-- Ensures full Unicode coverage -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif&family=Noto+Sans+Symbols+2&display=swap"
+  />
+
     <script>
       // Force-set dark mode BEFORE first paint
       const isDark = localStorage.theme === "dark"
@@ -32,6 +43,9 @@ const { pageTitle } = Astro.props;
   <body>
     <Background />
     <Header />
+    <!-- spacer -->
+    <main class="px-2 pt-12 pb-12 max-w-3xl mx-auto text-neutral-800 dark:text-neutral-100"></main>
+
     <h1>{pageTitle}</h1>
     <slot />
   </body>

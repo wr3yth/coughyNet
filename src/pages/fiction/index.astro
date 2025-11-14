@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const stories = await getCollection("fiction");
+---
+
+<BaseLayout>
+  <main class="max-w-3xl mx-auto px-6 py-20">
+
+    <h1 class="text-3xl font-semibold mb-10">Fiction</h1>
+
+    {stories.length === 0 && (
+      <p class="text-neutral-500">No stories found.</p>
+    )}
+
+    <ul class="space-y-8">
+      {stories.map((story) => (
+        <li class="p-5 rounded-xl bg-white/10 backdrop-blur-md shadow">
+          <a href={`/fiction/${story.id}/`} class="text-2xl font-bold hover:text-blue-400">
+            {story.data.title}
+          </a>
+
+          {story.data.description && (
+            <p class="mt-2 opacity-80">{story.data.description}</p>
+          )}
+        </li>
+      ))}
+    </ul>
+
+  </main>
+</BaseLayout>
