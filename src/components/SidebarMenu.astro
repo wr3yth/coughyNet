@@ -1,0 +1,85 @@
+---
+type LinkTuple = [string, string];
+
+const { navLinks, lang = "en" } = Astro.props as {
+  navLinks: LinkTuple[];
+  lang?: "en" | "fa";
+};
+---
+
+<div
+  id="sidebar-backdrop"
+  data-sidebar-backdrop
+  class="fixed inset-0 bg-black/40 backdrop-blur-md opacity-0 pointer-events-none
+         transition-opacity duration-500 z-60"
+>
+  <aside
+    id="sidebar-overlay"
+    data-sidebar
+    class="select-none absolute top-0 right-0 w-[min(80vw,300px)] h-full 
+           bg-white/10 dark:bg-black/40
+           border-l border-white/20 backdrop-blur-2xl backdrop-saturate-150 shadow-xl
+           flex flex-col items-center justify-center gap-6
+           text-white text-lg font-medium
+           transform translate-x-full transition-transform duration-500 z-70"
+    inert
+  >
+    <ul class="flex flex-col gap-6" dir={lang === "fa" ? "rtl" : "ltr"}>
+      {navLinks.map(([label, href]: [string, string]) => (
+        <li>
+          <a
+            href={href}
+            class={lang === "fa" ? "block text-right" : ""}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+</div>
+
+<style is:global>
+  [data-sidebar].open {
+    transform: translateX(0);
+  }
+
+  [data-sidebar-backdrop].visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  document.addEventListener("DOMContentLoaded", () => {
+    const backdrop = document.getElementById("sidebar-backdrop");
+    const sidebar = document.getElementById("sidebar-overlay");
+
+    function openSidebar() {
+      sidebar.classList.add("open");
+      backdrop.classList.add("visible");
+      sidebar.removeAttribute("inert");
+      window.hamburgerOpen();
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove("open");
+      backdrop.classList.remove("visible");
+      sidebar.setAttribute("inert", "");
+      window.hamburgerClose();
+    }
+
+    window.openSidebar = openSidebar;
+    window.closeSidebar = closeSidebar;
+
+    backdrop.addEventListener("click", () => closeSidebar());
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeSidebar();
+    });
+
+    sidebar.querySelectorAll("a").forEach(a =>
+      a.addEventListener("click", () => closeSidebar())
+    );
+  });
+</script>

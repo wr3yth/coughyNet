@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const papers = [
+  {
+    title: "How AI can Revolutionize NPCs in Single-player Games",
+    link: "/pdf/Threshold-16_2-v6.pdf#page=83",
+    image: "/images/Threshold.jpeg", // ← replace later
+  },
+
+];
+---
+
+<BaseLayout>
+
+  <main class="w-full px-[clamp(1rem,4vw,4rem)] py-24 
+               text-neutral-800 dark:text-neutral-100">
+
+    <h1 class="text-4xl font-bold text-center mb-16 tracking-tight">
+      Research & Publications
+    </h1>
+
+    <div
+      class="grid gap-12 
+             sm:grid-cols-1
+             lg:grid-cols-2 
+             xl:grid-cols-3 
+             max-w-[1400px] mx-auto"
+    >
+      {papers.map((p) => (
+        <article
+          class="rounded-3xl overflow-hidden
+                 bg-white/10 dark:bg-black/20 backdrop-blur-xl
+                 border border-white/20 shadow-lg
+                 hover:bg-white/20 dark:hover:bg-black/30
+                 hover:-translate-y-1 hover:shadow-2xl
+                 transition-all duration-500 flex flex-col"
+        >
+          <!-- Image -->
+          <div class="w-full h-full relative">
+            <img
+              src={p.image}
+              alt={p.title}
+              class="w-full h-full object-cover transition-transform duration-700
+                     hover:scale-105"
+            />
+            <!-- Light overlay for readability -->
+            <div class="absolute inset-0 bg-black/10 dark:bg-black/20 pointer-events-none"></div>
+          </div>
+        
+          <!-- Content -->
+          <div class="p-6 flex flex-col flex-grow">
+            <h2 class="text-xl font-semibold mb-3">{p.title}</h2>
+          
+            <p class="text-[0.95rem] opacity-90 leading-relaxed mb-6">
+                    Published in <b>Threshold</b> - Scholarly Journal of the English Language Department of <b>Shahid Beheshti University.</b><br/> - Vol 16 · No 2 · p.75 
+
+            </p>
+          
+            <div class="mt-auto">
+              <a
+                href={p.link}
+                target="_blank"
+                class="inline-block px-4 py-2 rounded-full text-sm font-medium
+                       bg-blue-500/20 hover:bg-blue-500/30
+                       dark:bg-blue-500/30 dark:hover:bg-blue-500/40
+                       border border-blue-400/40 transition-all"
+              >
+                Read full paper
+              </a>
+            </div>
+          </div>
+        </article>
+
+      ))}
+    </div>
+
+  </main>
+</BaseLayout>

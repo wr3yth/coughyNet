@@ -5,10 +5,11 @@ const { frontmatter } = Astro.props;
 
 <BaseLayout>
 
-  <div class="fiction-content fiction-wrapper mx-auto max-w-3xl px-6 py-12">
+  <div class="fiction-content fiction-wrapper mx-auto max-w-3xl px-6 py-12 mt-12">
+
       <!-- 📌 Breadcrumbs -->
     <nav class="text-sm mb-6 opacity-80 ">
-      <a href="/fiction" class="hover:underline">Fiction</a>
+      <a href="/stories" class="hover:underline">Stories</a>
       <span class="mx-2">/</span>
       <span>{frontmatter.title}</span>
     </nav>

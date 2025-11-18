@@ -1,36 +1,32 @@
 <button
   id="theme-toggle"
   class="relative flex items-center justify-center w-10 h-10 rounded-full
-          hover:bg-white/20 transition-all duration-300 drop-shadow-xs/30 hover:scale-110"
+         hover:bg-white/20 transition-all duration-300 drop-shadow-xs/30 hover:scale-110"
   aria-label="Toggle theme"
   title="Toggle dark mode"
 >
-  <!-- Moon (light mode icon) -->
+  <!-- Moon -->
   <svg
     id="icon-moon"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill="currentColor"
-    class="absolute w-6 h-6 text-yellow-300 
-           opacity-100 scale-100 rotate-0
-           transition-all duration-500"
+    class="absolute w-6 h-6 text-yellow-300 transition-all duration-500"
   >
     <path d="M12 1.992a10 10 0 1 0 9.236 13.838c.341 -.82 -.476 -1.644 -1.298 -1.31a6.5 6.5 0 0 1 -6.864 -10.787l.077 -.08c.551 -.63 .113 -1.653 -.758 -1.653h-.266l-.068 -.006l-.06 -.002z" />
   </svg>
 
-  <!-- Sun (dark mode icon) -->
+  <!-- Sun -->
   <svg
     id="icon-sun"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill="currentColor"
-    class="absolute w-6 h-6 text-yellow-300 
-           opacity-0 scale-100 rotate-90
-           transition-all duration-500"
+    class="absolute w-6 h-6 text-yellow-300 transition-all duration-500"
   >
     <path d="M12 19a1 1 0 0 1 .993 .883l.007 .117v1a1 1 0 0 1 -1.993 .117l-.007 -.117v-1a1 1 0 0 1 1 -1z" />
     <path d="M18.313 16.91l.094 .083l.7 .7a1 1 0 0 1 -1.32 1.497l-.094 -.083l-.7 -.7a1 1 0 0 1 1.218 -1.567l.102 .07z" />
-    <path d="M7.007 16.993a1 1 0 0 1 .083 1.32l-.083 .094l-.7 .7a1 1 0 0 1 -1.497 -1.32l.083 -.094l.7 -.7a1 1 0 0 1 1.414 0z" />
+    <path d="M7.007 16.993a1 1 0 0 1 .083 1.32l-.083 .094l-.7 .7a1 1 0 0 1 -1.497 -1.32l.083 -.094l-.7 -.7a1 1 0 0 1 1.414 0z" />
     <path d="M4 11a1 1 0 0 1 .117 1.993l-.117 .007h-1a1 1 0 0 1 -.117 -1.993l.117 -.007h1z" />
     <path d="M21 11a1 1 0 0 1 .117 1.993l-.117 .007h-1a1 1 0 0 1 -.117 -1.993l.117 -.007h1z" />
     <path d="M6.213 4.81l.094 .083l.7 .7a1 1 0 0 1 -1.32 1.497l-.094 -.083l-.7 -.7a1 1 0 0 1 1.217 -1.567l.102 .07z" />
@@ -40,33 +36,45 @@
   </svg>
 </button>
 
-<script >
-  // @ts-nocheck
+<script is:inline>
+  /**
+   * PRE-PAINT THEME + ICON STATE (no FOUC)
+   */
+  ;(() => {
+    const stored = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const isDark = stored === "dark" || (!stored && prefersDark);
+
+    // apply theme immediately
+    document.documentElement.classList.toggle("dark", isDark);
+
+    // preload icon states
+    const css = `
+      #icon-sun {
+        opacity: ${isDark ? "1" : "0"};
+        transform: ${isDark ? "scale(1) rotate(0deg)" : "scale(0.5) rotate(90deg)"};
+      }
+      #icon-moon {
+        opacity: ${isDark ? "0" : "1"};
+        transform: ${isDark ? "scale(0.5) rotate(-90deg)" : "scale(1) rotate(0deg)"};
+      }
+    `;
+    const tag = document.createElement("style");
+    tag.innerHTML = css;
+    document.head.appendChild(tag);
+  })();
+</script>
+
+<script>
   document.addEventListener("DOMContentLoaded", () => {
     const root = document.documentElement;
-    const btn = document.getElementById("theme-toggle");
-    const sun = document.getElementById("icon-sun");
-    const moon = document.getElementById("icon-moon");
 
-    if (!btn || !sun || !moon) {
-      console.error("ThemeToggle icons not found");
-      return;
-    }
+    // Non-null DOM elements (safe inside component)
+    const btn = document.getElementById("theme-toggle")!;
+    const sun = document.getElementById("icon-sun")!;
+    const moon = document.getElementById("icon-moon")!;
 
-    // Initial theme from FOUC script
-    const isDark = root.classList.contains("dark");
-    applyTheme(isDark ? "dark" : "light");
-
-    btn.addEventListener("click", () => {
-      const newTheme = root.classList.contains("dark") ? "light" : "dark";
-      root.classList.toggle("dark", newTheme === "dark");
-      applyTheme(newTheme);
-      localStorage.setItem("theme", newTheme);
-    });
-
-    function applyTheme(theme) {
-      const isDark = theme === "dark";
-
+    const updateIcons = (isDark: boolean) => {
       sun.style.opacity = isDark ? "1" : "0";
       sun.style.transform = isDark
         ? "scale(1) rotate(0deg)"
@@ -76,24 +84,13 @@
       moon.style.transform = isDark
         ? "scale(0.5) rotate(-90deg)"
         : "scale(1) rotate(0deg)";
-    }
+    };
+
+    btn.addEventListener("click", () => {
+      const newDark = !root.classList.contains("dark");
+      root.classList.toggle("dark", newDark);
+      updateIcons(newDark);
+      localStorage.setItem("theme", newDark ? "dark" : "light");
+    });
   });
-<script>
-  (function () {
-    const stored = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = stored === "dark" || (!stored && prefersDark);
-
-    // Apply dark class immediately
-    if (isDark) document.documentElement.classList.add("dark");
-
-    // Set correct icon states BEFORE the HTML becomes visible
-    const css = `
-      #icon-sun { opacity: ${isDark ? "1" : "0"}; transform: ${isDark ? "scale(1) rotate(0deg)" : "scale(0.5) rotate(90deg)"}; }
-      #icon-moon { opacity: ${isDark ? "0" : "1"}; transform: ${isDark ? "scale(0.5) rotate(-90deg)" : "scale(1) rotate(0deg)"}; }
-    `;
-    const tag = document.createElement("style");
-    tag.innerHTML = css;
-    document.head.appendChild(tag);
-  })();
 </script>

@@ -21,11 +21,9 @@ const blog = defineCollection({
   }),
 });
 
-// =========================
-// FICTION COLLECTION (new)
-// =========================
-const fiction = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/fiction" }),
+
+const stories = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/stories" }),
   schema: z.object({
   title: z.string().optional(),
   description: z.string().optional(),
@@ -33,9 +31,25 @@ const fiction = defineCollection({
   }),
 });
 
+const poetry = defineCollection({
+  loader: glob({
+    pattern: "**/*.md",
+    base: "./src/poems",
+  }),
+  schema: z.object({
+    title: z.string(),
+    poet: z.string().optional(),
+    date: z.string().optional(),
+    loyalty: z.string().optional(),
+    image: z.string().optional(),
+  }),
+});
+
+
 
 // Export BOTH
 export const collections = {
   blog,
-  fiction,
+  stories,
+  poetry,
 };

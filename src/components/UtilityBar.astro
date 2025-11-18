@@ -1,0 +1,59 @@
+---
+import ModeToggle from "./ModeToggle.astro";
+import Hamburger from "./Hamburger.astro";
+---
+
+<div 
+  id="utility-bar"
+  data-utility-bar
+  class="fixed top-3 right-8 z-80 rounded-full 
+         flex items-center justify-center h-[3.1rem]
+         transition-color-scale duration-500 ease-in-out group"
+>
+  <div
+    id="utility-bg"
+    data-utility-bg
+    class="absolute left-1/2 -translate-x-1/2 rounded-full
+           bg-white/10 group-hover:bg-white/30 dark:group-hover:bg-black/30
+           backdrop-blur-xl shadow-lg shadow-black/10
+           transition-all duration-200 ease-in-out
+           opacity-100 w-32 h-full z-60"
+  ></div>
+
+  <div
+    id="utility-content"
+    data-utility-content
+    class="relative z-80 flex items-center gap-2 px-4
+           transition-all duration-500 ease-in-out"
+  >
+    <div
+      id="mode-wrapper"
+      data-mode-wrapper
+      class="transition-transform duration-500 ease-in-out"
+    >
+      <ModeToggle />
+    </div>
+
+    <div id="menu-wrapper" data-hamburger>
+      <Hamburger />
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* Utility BG fade/shift */
+  #utility-bg.fade-out {
+    opacity: 0;
+  }
+
+  #utility-bg.expanded {
+    width: 5rem;
+    transform: translateX(-5rem) scale(0.9);
+  }
+
+  @media (max-width: 600px) {
+    #utility-bar {
+      right: 1rem;
+    }
+  }
+</style>

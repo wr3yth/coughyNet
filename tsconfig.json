@@ -6,7 +6,7 @@
     ".astro/types.d.ts",
     "src/**/*",
     "astro.config.*"
-  ],
+, "public/scripts/nav-effects.js"  ],
 
   "exclude": [
     "dist",

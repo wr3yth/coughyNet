@@ -1,31 +1,32 @@
 ---
 /*
-  Hamburger.astro (matches ModeToggle inner button style)
+  Hamburger.astro
 */
 ---
 
 <button
   id="menu-toggle"
   class="relative flex items-center justify-center w-10 h-10
-        rounded-full hover:bg-white/20   drop-shadow hover:scale-110
-        transition-all duration-300 pointer-events-auto active:scale-95"
-  
-  aria-label="Toggle menu"
-  aria-expanded="false"
+         rounded-full hover:bg-white/20 drop-shadow hover:scale-110
+         transition-all duration-300 pointer-events-auto active:scale-95"
 >
-  <!-- Lines -->
   <span
-    class="block absolute w-5 h-0.5 bg-neutral-900 dark:bg-white rounded transition-transform-color duration-300 ease-in-out origin-center shadow-inner"
     id="line-top"
+    class="block absolute w-5 h-0.5 bg-neutral-900 dark:bg-white rounded
+           transition-transform duration-300 ease-in-out origin-center"
     style="transform: translateY(-6px);"
   ></span>
+
   <span
-    class="block absolute w-5 h-0.5 bg-neutral-900 dark:bg-white rounded transition-opacity-color duration-300 ease-in-out origin-center shadow-inner"
     id="line-mid"
+    class="block absolute w-5 h-0.5 bg-neutral-900 dark:bg-white rounded
+           transition-opacity duration-200 ease-in-out origin-center"
   ></span>
+
   <span
-    class="block absolute w-5 h-0.5 bg-neutral-900 dark:bg-white rounded transition-transform-color duration-300 ease-in-out origin-center shadow-inner"
     id="line-bot"
+    class="block absolute w-5 h-0.5 bg-neutral-900 dark:bg-white rounded
+           transition-transform duration-300 ease-in-out origin-center"
     style="transform: translateY(6px);"
   ></span>
 </button>
@@ -34,43 +35,36 @@
   // @ts-nocheck
   document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("menu-toggle");
-    const menu = document.getElementById("sidebar-overlay");
-    const overlayBg = document.getElementById("sidebar-backdrop");
     const top = document.getElementById("line-top");
     const mid = document.getElementById("line-mid");
     const bot = document.getElementById("line-bot");
 
-    if (!btn || !menu || !overlayBg) return;
+    if (!btn) return;
 
-    const toggleMenu = (open) => {
-      menu.classList.toggle("translate-x-0", open);
-      menu.classList.toggle("translate-x-full", !open);
-      overlayBg.classList.toggle("opacity-100", open);
-      overlayBg.classList.toggle("pointer-events-auto", open);
-      btn.setAttribute("aria-expanded", open);
+    let isOpen = false;
 
-      if (open) {
-        top.style.transform = "rotate(45deg)";
-        bot.style.transform = "rotate(-45deg)";
-        mid.style.opacity = "0";
-      } else {
-        top.style.transform = "translateY(-6px) rotate(0)";
-        bot.style.transform = "translateY(6px) rotate(0)";
-        mid.style.opacity = "1";
-      }
-    };
+    function animateOpen() {
+      top.style.transform = "translateY(0px) rotate(45deg)";
+      bot.style.transform = "translateY(0px) rotate(-45deg)";
+      mid.style.opacity = "0";
+      isOpen = true;
+    }
 
+    function animateClose() {
+      top.style.transform = "translateY(-6px) rotate(0deg)";
+      bot.style.transform = "translateY(6px) rotate(0deg)";
+      mid.style.opacity = "1";
+      isOpen = false;
+    }
+
+    // Button click → open or close
     btn.addEventListener("click", () => {
-      const open = btn.getAttribute("aria-expanded") === "true";
-      toggleMenu(!open);
+      if (isOpen) window.closeSidebar(); // sidebar will call animateClose()
+      else window.openSidebar();         // sidebar will call animateOpen()
     });
 
-    overlayBg.addEventListener("click", (e) => {
-      if (e.target === overlayBg) toggleMenu(false);
-    });
-
-    document.querySelectorAll("#sidebar-overlay a").forEach((link) => {
-      link.addEventListener("click", () => toggleMenu(false));
-    });
+    // Expose animation functions globally
+    window.hamburgerOpen = animateOpen;
+    window.hamburgerClose = animateClose;
   });
 </script>

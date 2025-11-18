@@ -1,52 +1,82 @@
 ---
 import Background from "../components/Astrogen.astro";
 import Header from "../components/Header.astro";
-
+import SocialBar from "../components/SocialBar.astro";
 import "../styles/global.css";
-const { pageTitle } = Astro.props;
+
+
+const {
+  pageTitle,
+  lang = "en",     // 'en' or 'fa'
+  pageClass = "",  // optional page-specific classes
+} = Astro.props;
 ---
 
-<html lang="en" class="transition-none">
-  
+<html lang={lang}  class="transition-none">
   <head>
-      <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <slot name="head" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <slot name="head" />
 
-  <!-- Ensures full Unicode coverage -->
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Noto+Serif&family=Noto+Sans+Symbols+2&display=swap"
-  />
-
-    <script>
-      // Force-set dark mode BEFORE first paint
-      const isDark = localStorage.theme === "dark"
-        || (!("theme" in localStorage)
-            && window.matchMedia("(prefers-color-scheme: dark)").matches);
-
-      if (isDark) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+    <!-- THEME: prevent FOUC -->
+    <script is:inline>
+      const saved = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const isDark = saved === "dark" || (!saved && prefersDark);
+      if (isDark) document.documentElement.classList.add("dark");
     </script>
 
-    <script>
-      // Remove transition suppression AFTER page load
+    <!-- Auto font switch based on language -->
+    {lang === "fa" ? (
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+      />
+    ) : (
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif&family=Noto+Sans+Symbols+2&display=swap"
+      />
+    )}
+
+    <!-- Allow transitions only after page is ready -->
+    <script is:inline>
       window.addEventListener("load", () => {
         document.documentElement.classList.remove("transition-none");
       });
     </script>
   </head>
 
-  <body>
+  <body class={`min-h-screen ${lang === "fa" ? "font-[Vazirmatn]" : "font-[Noto_Serif]"} ${pageClass}`}>
     <Background />
-    <Header />
-    <!-- spacer -->
-    <main class="px-2 pt-12 pb-12 max-w-3xl mx-auto text-neutral-800 dark:text-neutral-100"></main>
+    <Header lang={lang} />
 
-    <h1>{pageTitle}</h1>
-    <slot />
+    <!-- Main Page Container -->
+    <main id="page-content" data-page-content class="relative z-10">
+      {pageTitle && (
+        <h1 class="text-4xl font-semibold mb-8 text-center">{pageTitle}</h1>
+      )}
+
+      <slot />
+    </main>
+
+    <!-- Accessibility: inert when sidebar is open -->
+    <script is:inline>
+      document.addEventListener("DOMContentLoaded", () => {
+        const content = document.getElementById("page-content");
+
+        document.addEventListener("sidebar:open", () => {
+          content.setAttribute("aria-hidden", "true");
+          content.setAttribute("inert", "");
+        });
+
+        document.addEventListener("sidebar:close", () => {
+          content.removeAttribute("aria-hidden");
+          content.removeAttribute("inert");
+        });
+      });
+    </script>
+
+    <SocialBar lang={lang} />
   </body>
 </html>

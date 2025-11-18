@@ -66,7 +66,7 @@ DEFAULT_CONFIG = {
     "format": "md",
     "theme": "default",
     "ignore": [
-        "node_modules", ".git", ".vscode", "__pycache__", ".svg",
+        "node_modules", ".git", ".vscode", ".astro", "dist" , "__pycache__", ".svg",
         "flatshot.py", "flatConf.config",
         r"^flat-[\w\-]+(?:\(\d+\))?(?:-\d{4}-\d{2}-\d{2}_\d{2}-\d{2})?\.md$"
 

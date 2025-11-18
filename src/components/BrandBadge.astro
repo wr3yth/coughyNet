@@ -1,0 +1,34 @@
+---
+import LangToggle from "./LangToggle.astro";
+---
+
+<div class="fixed top-3 left-3 z-200 pointer-events-none">
+  <div
+    class="relative pointer-events-auto flex items-center gap-2
+           h-[3.1rem] px-[clamp(0.9rem,1.2vw,1.2rem)] 
+           rounded-full"
+  >
+    <!-- Background -->
+    <div
+      class="absolute inset-0 rounded-full backdrop-blur-xl shadow-lg
+             hover:bg-white/30 dark:hover:bg-black/30
+             transition-color-scale duration-300 ease-out z-10"
+    ></div>
+
+    <!-- Brand title -->
+    <a
+      href="/"
+      class="relative z-210 font-semibold select-none
+             text-[clamp(1.08rem,1.35vw,1.45rem)]
+             whitespace-nowrap hover:scale-105 duration-500"
+    >
+      Coughy.net
+    </a>
+
+    <!-- Language toggle next to brand -->
+    <div class="relative z-210 ml-1">
+      <LangToggle />
+    </div>
+
+  </div>
+</div>

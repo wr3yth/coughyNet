@@ -1,0 +1,109 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout lang="fa">
+
+<main dir="rtl" class="relative text-neutral-800 dark:text-neutral-100 font-[Vazirmatn]">
+
+  <!-- BACKGROUND -->
+  <div class="pointer-events-none fixed inset-0 z-0 opacity-50">
+    <div class="absolute inset-0 bg-linear-to-br from-purple-500/10 via-blue-500/10 to-pink-500/10 blur-3xl animate-pulse-slow"></div>
+  </div>
+
+  <!-- HERO -->
+  <section class="relative z-10 flex flex-col items-center justify-center 
+                  text-center pt-48 pb-32 px-4">
+
+    <h1 class="text-6xl md:text-7xl font-semibold tracking-tight mb-6 drop-shadow-lg">
+      coughy<span class="opacity-50 bg-linear-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">.</span>net
+    </h1>
+
+    <p class="text-xl md:text-2xl opacity-80 max-w-2xl leading-relaxed">
+      داستان · پژوهش · آگاهی · ابزار
+    </p>
+
+  </section>
+
+  <!-- PORTALS GRID -->
+  <section class="relative z-10 max-w-7xl mx-auto px-6 pb-32">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+
+      <!-- Fiction & Poetry -->
+      <a
+        href="/fa/literature"
+        class="group rounded-3xl p-8 bg-white/10 dark:bg-black/20
+               border border-white/20 backdrop-blur-xl shadow-lg
+               hover:bg-white/20 dark:hover:bg-black/30
+               hover:-translate-y-1 hover:shadow-2xl
+               transition-all duration-500 cursor-pointer text-right"
+      >
+        <h2 class="text-2xl font-semibold mb-4">ادبیات و شعر</h2>
+        <p class="opacity-80 leading-relaxed">
+          داستان‌ها، تجربه‌ها و شعرهایی درباره حالات ذهنی، احساسات و زبان.
+        </p>
+        <div class="mt-6 text-blue-300 opacity-0 group-hover:opacity-100 transition-all">
+          ← مشاهده
+        </div>
+      </a>
+
+      <!-- Projects -->
+      <a
+        href="/fa/projects"
+        class="group rounded-3xl p-8 bg-white/10 dark:bg-black/20
+               border border-white/20 backdrop-blur-xl shadow-lg
+               hover:bg-white/20 dark:hover:bg-black/30
+               hover:-translate-y-1 hover:shadow-2xl
+               transition-all duration-500 cursor-pointer text-right"
+      >
+        <h2 class="text-2xl font-semibold mb-4">پروژه‌ها و ابزارها</h2>
+        <p class="opacity-80 leading-relaxed">
+          نرم‌افزار، آزمایش‌ها و ابزارهای فلسفی — برای پرسشگری و گسترش آگاهی.
+        </p>
+        <div class="mt-6 text-blue-300 opacity-0 group-hover:opacity-100 transition-all">
+          ← مشاهده
+        </div>
+      </a>
+
+      <!-- Research -->
+      <a
+        href="/fa/research"
+        class="group rounded-3xl p-8 bg-white/10 dark:bg-black/20
+               border border-white/20 backdrop-blur-xl shadow-lg
+               hover:bg-white/20 dark:hover:bg-black/30
+               hover:-translate-y-1 hover:shadow-2xl
+               transition-all duration-500 cursor-pointer text-right"
+      >
+        <h2 class="text-2xl font-semibold mb-4">پژوهش و ایده‌ها</h2>
+        <p class="opacity-80 leading-relaxed">
+          مقالات، تحلیل‌ها و پژوهش‌های ذهنی — تلاشی برای ترسیم جهان درونی.
+        </p>
+        <div class="mt-6 text-blue-300 opacity-0 group-hover:opacity-100 transition-all">
+          ← مشاهده
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <section class="relative z-10 pb-32 px-6 flex justify-center">
+    <blockquote
+      class="max-w-3xl text-center text-xl md:text-2xl font-light
+             opacity-80 leading-relaxed italic"
+    >
+      گاهی باید ساختارهای به ارث رسیده را شکست تا ببینی در ترک‌ها چه چیزی جوانه می‌زند.
+    </blockquote>
+  </section>
+
+</main>
+
+</BaseLayout>
+
+<style is:global>
+  @keyframes pulse-slow {
+    0% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.05); }
+    100% { opacity: 0.3; transform: scale(1); }
+  }
+</style>

@@ -1,0 +1,88 @@
+<button
+  id="lang-toggle"
+  class="relative flex items-center justify-center w-10 h-10 rounded-full
+         hover:bg-white/20 transition-all duration-300 drop-shadow-xs/30 hover:scale-110"
+  aria-label="Toggle language"
+  title="Change language"
+>
+  <!-- EN icon -->
+  <span
+    id="icon-en"
+    class="absolute text-sm font-bold transition-all duration-500"
+  >
+    EN
+  </span>
+
+  <!-- FA icon -->
+  <span
+    id="icon-fa"
+    class="absolute text-sm font-bold transition-all duration-500"
+  >
+    فا
+  </span>
+</button>
+
+
+<script is:inline>
+  ;(() => {
+    // Detect from storage or current URL
+    const stored = localStorage.getItem("lang");
+    const urlLang = location.pathname.startsWith("/fa") ? "fa" : "en";
+    const lang = stored || urlLang;
+
+    // Preload icon state
+    const css = `
+      #icon-en {
+        opacity: ${lang === "en" ? "1" : "0"};
+        transform: ${lang === "en" ? "scale(1)" : "scale(0.5)"};
+      }
+      #icon-fa {
+        opacity: ${lang === "fa" ? "1" : "0"};
+        transform: ${lang === "fa" ? "scale(1)" : "scale(0.5)"};
+      }
+    `;
+    const tag = document.createElement("style");
+    tag.innerHTML = css;
+    document.head.appendChild(tag);
+  })();
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("lang-toggle")!;
+    const iconEN = document.getElementById("icon-en")!;
+    const iconFA = document.getElementById("icon-fa")!;
+
+    const animateIcons = (toFA: boolean) => {
+      iconEN.style.opacity = toFA ? "0" : "1";
+      iconEN.style.transform = toFA ? "scale(0.5)" : "scale(1)";
+
+      iconFA.style.opacity = toFA ? "1" : "0";
+      iconFA.style.transform = toFA ? "scale(1)" : "scale(0.5)";
+    };
+
+    btn.addEventListener("click", () => {
+      const path = location.pathname;
+      const isFA = path.startsWith("/fa");
+
+      let newPath = "";
+
+      if (isFA) {
+        // FA → EN
+        newPath = path.replace(/^\/fa/, "") || "/";
+        localStorage.setItem("lang", "en");
+        animateIcons(false);
+      } else {
+        // EN → FA
+        newPath = "/fa" + (path === "/" ? "" : path);
+        localStorage.setItem("lang", "fa");
+        animateIcons(true);
+      }
+
+      // Navigate
+      window.location.href = newPath;
+    });
+  });
+</script>
+

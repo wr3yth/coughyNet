@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+// load poems
+const poems = await getCollection("poetry");
+
+// get first 2–3 lines as excerpt
+const excerpt = (body?: string) => {
+  if (!body) return "";
+  const lines = body.trim().split("\n").filter(Boolean).slice(0, 3);
+  return lines.join("\n");
+};
+---
+
+<BaseLayout>
+
+  <main class="px-6 py-24 max-w-4xl mx-auto text-neutral-800 dark:text-neutral-100 leading-relaxed">
+
+    <!-- Title -->
+    <h1 class="text-4xl font-serif font-bold mb-12 text-center tracking-tight">
+      Poems
+    </h1>
+
+    <div class="grid md:grid-cols-2 gap-10">
+      {poems.map((poem) => (
+        <a 
+          href={`/poems/${poem.id}`} 
+          class="group rounded-2xl overflow-hidden bg-white/10 dark:bg-white/5
+                 border border-white/20 backdrop-blur-lg 
+                 hover:bg-white/20 dark:hover:bg-white/10 
+                 transition-all duration-300"
+        >
+
+          <!-- Preview image/video if exists -->
+          {poem.data.image && poem.data.image.endsWith(".mp4") ? (
+            <video 
+              src={poem.data.image}
+              autoplay
+              loop
+              muted
+              playsinline
+              class="w-full h-48 object-cover opacity-80 group-hover:opacity-100 transition"
+            ></video>
+          ) : poem.data.image ? (
+            <img 
+              src={poem.data.image}
+              alt={poem.data.title}
+              class="w-full h-48 object-cover opacity-80 group-hover:opacity-100 transition"
+            />
+          ) : (
+            <div class="w-full h-48 bg-gradient-to-br from-white/10 to-white/5 dark:from-white/5 dark:to-white/10"></div>
+          )}
+
+          <!-- Text content -->
+          <div class="p-6">
+            <h2 class="text-2xl font-serif font-semibold mb-2 group-hover:opacity-80">
+              {poem.data.title}
+            </h2>
+
+            {poem.data.poet && (
+              <p class="text-sm opacity-60 italic mb-3">
+                by {poem.data.poet}
+              </p>
+            )}
+
+            <p class="whitespace-pre-line opacity-80 text-sm font-serif leading-snug line-clamp-4">
+              {excerpt(poem.body)}
+            </p>
+
+          </div>
+
+        </a>
+      ))}
+    </div>
+
+  </main>
+
+</BaseLayout>

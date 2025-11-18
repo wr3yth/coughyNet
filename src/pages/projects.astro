@@ -1,6 +1,118 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-const pageTitle = "Home Page";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const projects = [
+  {
+    title: "Contraculator",
+    description:
+      "A philosophical calculator free from most evolutionary assumptions. You must first construct its numeric system from scratch in order to use it.",
+    github: "https://github.com/wr3yth/Contraculator",
+    demo: "https://wr3yth.github.io/Contraculator/"
+  },
+
+  {
+    title: "Flatshot",
+    description:
+      "Feed entire projects into LLMs without mess. Flatshot flattens any project into a single machine/human-readable file, ignoring irrelevant data.",
+    github: "https://github.com/wr3yth/Flatshot"
+  },
+
+  {
+    title: "🇮🇷 Fa_Docs | گوگل فاکس",
+    description:
+      "A Google Docs add-on that brings advanced Persian (Farsi) typography & numbering features — fully RTL-compatible.",
+    link: "https://workspace.google.com/marketplace/app/farsi_tools/xxxxxxxx"
+  },
+
+  {
+    title: "Enpsyclopedia of Altered States of Consciousness",
+    description:
+      "My ongoing documenting of altered states of consciousness, phenomenology, and psychedelic cognition.",
+    link: "/wiki"
+  },
+];
 ---
+
 <BaseLayout>
+  <main class="w-full px-[clamp(1rem,4vw,4rem)] py-24 
+               text-neutral-800 dark:text-neutral-100">
+
+    <h1 class="text-4xl font-bold text-center mb-16 tracking-tight">
+      My Projects
+    </h1>
+
+    <div
+      class="grid gap-10 
+             sm:grid-cols-2 
+             lg:grid-cols-3 
+             xl:grid-cols-4 
+             mx-auto max-w-[2000px]"
+    >
+      {projects.map((p) => (
+        <div
+          class="rounded-3xl p-6 
+                 bg-white/30 dark:bg-black/20 backdrop-blur-xl
+                 border border-white/20 shadow-lg
+                 transition-all duration-500 
+                 hover:bg-white/20 dark:hover:bg-black/30
+                 hover:-translate-y-1 hover:shadow-2xl
+                 flex flex-col justify-between"
+        >
+          <div>
+            <h2 class="text-xl font-semibold mb-3">{p.title}</h2>
+            <p class="text-[0.95rem] opacity-90 leading-relaxed mb-6">
+              {p.description}
+            </p>
+          </div>
+
+          <div class="mt-auto flex flex-wrap gap-3">
+
+            {p.link && (
+              <a
+                href={p.link}
+                class="px-4 py-2 rounded-full text-sm font-medium
+                       bg-blue-500/20 hover:bg-blue-500/30
+                       dark:bg-blue-500/30 dark:hover:bg-blue-500/40
+                       border border-blue-400/40
+                       transition-all"
+                target="_blank"
+              >
+                Link
+              </a>
+            )}
+
+            {p.github && (
+              <a
+                href={p.github}
+                class="px-4 py-2 rounded-full text-sm font-medium
+                       bg-gray-500/20 hover:bg-gray-500/30
+                       dark:bg-gray-500/30 dark:hover:bg-gray-500/40
+                       border border-gray-400/40
+                       transition-all"
+                target="_blank"
+              >
+                GitHub
+              </a>
+            )}
+
+            {p.demo && (
+              <a
+                href={p.demo}
+                class="px-4 py-2 rounded-full text-sm font-medium
+                       bg-purple-500/20 hover:bg-purple-500/30
+                       dark:bg-purple-500/30 dark:hover:bg-purple-500/40
+                       border border-purple-400/40
+                       transition-all"
+                target="_blank"
+              >
+                Live Demo
+              </a>
+            )}
+
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </main>
 </BaseLayout>

@@ -7,7 +7,7 @@ export async function GET(context) {
   return rss({
     title: 'Astro Learner | Blog',
     description: 'My journey learning Astro',
-    site: context.site,
+    site: 'https://coughy.net',
     items: posts.map((post) => ({
       title: post.data.title,
       pubDate: post.data.pubDate,

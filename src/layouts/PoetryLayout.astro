@@ -1,0 +1,95 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+const { frontmatter } = Astro.props;
+---
+
+<BaseLayout>
+
+
+
+  <div class="poetry-wrapper mx-auto max-w-2xl px-6 mt-28 mb-24 text-center">
+      <!-- 📌 Breadcrumbs -->
+    <nav class="text-sm mb-6 opacity-80 ">
+      <a href="/poems" class="hover:underline">Poems</a>
+      <span class="mx-2">/</span>
+      <span>{frontmatter.title}</span>
+    </nav>
+    <!-- Title -->
+    <h1 class="text-4xl font-serif mb-2 tracking-tight">
+      {frontmatter.title}
+    </h1>
+
+    <!-- Poet -->
+    {frontmatter.poet && (
+      <p class="text-lg opacity-70 italic mb-2">by {frontmatter.poet}</p>
+    )}
+
+    <!-- Date -->
+    {frontmatter.date && (
+      <p class="text-sm opacity-50 mb-6">{frontmatter.date}</p>
+    )}
+
+
+        
+    <!-- Poem body -->
+    <article class="poem-body leading-relaxed text-lg font-serif whitespace-pre-wrap">
+      <slot />
+        <!-- Optional Image -->
+        {frontmatter.image && (
+          frontmatter.image.endsWith(".mp4") ? (
+            <video 
+              src={frontmatter.image}
+              autoplay
+              loop
+              muted
+              playsinline
+              class="mx-auto mb-10 rounded-lg shadow-md max-h-80 object-contain"
+            ></video>
+          ) : (
+            <img
+              src={frontmatter.image}
+              alt={frontmatter.title}
+              class="mx-auto mb-10 rounded-lg shadow-md max-h-80 object-contain"
+            />
+          )
+        )}
+        
+    </article>
+    
+
+        <!-- Loyalty / Notes -->
+    {frontmatter.loyalty && (
+    <p
+      class="text-xs italic opacity-50 mb-8 leading-relaxed 
+             [&_a]:underline [&_a]:opacity-80 hover:[&_a]:opacity-100"
+      set:html={frontmatter.loyalty}
+    ></p>    )}
+
+
+
+  </div>
+
+</BaseLayout>
+
+<style is:global>
+  /* Soft vertical rhythm for poetry */
+  .poem-body p {
+    margin: 1rem 0;
+  }
+
+  /* Ensure line breaks inside markdown render as poetry */
+  .poem-body {
+    white-space: pre-wrap !important;
+  }
+
+  /* Optional gentle fade */
+  .poetry-wrapper {
+    animation: fadeIn 0.8s ease both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

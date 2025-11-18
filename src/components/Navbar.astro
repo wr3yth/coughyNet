@@ -1,294 +1,205 @@
 ---
-import Hamburger from "./Hamburger.astro";
-import ModeToggle from "./ModeToggle.astro";
+interface NavItem {
+  label: string;
+  href: string;
+}
 
-const navLinks = [
-  ["Home", "/"],
-  ["Wiki", "/wiki"],
-  ["Blog", "/blog"],
-  ["Fiction", "/fiction"],
-  ["Poetry", "/poetry"],
-  ["Projects", "/projects"],
-  ["Partners", "/partners"],
-  ["About", "/about"],
-];
+interface Props {
+  navLinks: NavItem[] | [string, string][];
+  lang?: "en" | "fa";
+}
+
+function normalizeNavLinks(raw: Props["navLinks"]) {
+  return raw.map((item) => {
+    if (Array.isArray(item)) return { label: item[0], href: item[1] };
+    return item as NavItem;
+  });
+}
+
+const { navLinks, lang = "en" } = Astro.props as Props;
+const isFA = lang === "fa";
+
+const links = normalizeNavLinks(navLinks);
+
+// normalize current path
+const current = Astro.url.pathname.replace(/\/+$/, "") || "/";
 ---
 
-<!-- ===================================
-     HEADER — Main Navigation Bar
-     =================================== -->
-<header
-  class="fixed top-3 inset-x-0 z-50 text-neutral-700 dark:text-white  font-medium tracking-tight transition-all duration-500 ease-in-out select-none"
->
-  <div
-    class="mx-auto flex items-center justify-between gap-2 px-[clamp(1rem,3vw,2.5rem)]
-           pointer-events-auto transition-all duration-500 ease-in-out w-full"
-  >
-    <!-- Brand -->
-    <a
-      href="/"
-      class="flex items-center justify-center h-[3.1rem]
-             px-[clamp(0.9rem,1.2vw,1.2rem)] rounded-full
-             backdrop-blur-xl shadow-lg 
-             hover:bg-white/30 dark:hover:bg-black/30 transition-all duration-300 ease-out shrink-0"
-    >
-      <span class="font-semibold text-[clamp(1.08rem,1.35vw,1.45rem)] whitespace-nowrap hover:scale-105 duration-500 ">
-        Coughy.net
-      </span>
-    </a>
+<script src="/scripts/nav-effects.js" defer></script>
 
-    <!-- Nav Links -->
-    <nav
-      class="relative flex items-center justify-center h-[3.1rem]
-             px-[clamp(0.6rem,1.5vw,1.5rem)] flex-1 mx-auto
-             max-w-[900px] rounded-full 
-             bg-[rgba(250,250,250,0.15)]  hover:bg-white/30 dark:hover:bg-black/30
-              backdrop-blur-xl shadow-lg shadow-black/10
-              transition-all duration-300 ease-in-out
-             min-w-0 overflow-hidden "
-      aria-label="Main Navigation"
+
+<header
+  class={[
+    "fixed top-3 left-0 right-0 z-50",
+    "text-neutral-700 dark:text-white font-medium tracking-tight",
+    "transition-color-scale duration-500 ease-in-out select-none",
+    isFA && "direction-rtl text-right",        // RTL fix
+  ].join(" ")}
+>
+  <nav
+    data-main-nav
+    class={[
+      "relative justify-self-center flex items-center justify-center h-[3.1rem]",
+      "px-[clamp(0.6rem,1.5vw,1.5rem)] max-w-[900px] w-full rounded-full",
+      "bg-[rgba(250,250,250,0.15)] hover:bg-white/30 dark:hover:bg-black/30",
+      "backdrop-blur-xl shadow-lg shadow-black/10",
+      "transition-all duration-300 ease-in-out min-w-0 overflow-hidden",
+      isFA && "flex-row-reverse",              // RTL fix
+    ].join(" ")}
+    aria-label="Main Navigation"
+  >
+    <ul
+      class={[
+        "flex justify-center items-center flex-nowrap",
+        "gap-[clamp(0.3rem,1.2vw,2rem)] list-none m-0 p-0",
+        isFA && "flex-row-reverse",            // RTL fix
+      ].join(" ")}
     >
-        
-      <ul
-        class="flex justify-center items-center flex-nowrap
-               gap-[clamp(0.3rem,1.2vw,2rem)] list-none m-0 p-0"
-      >
-        {navLinks.map(([label, href]) => (
+      {links.map(({ label, href }) => {
+        const normalized = href.replace(/\/+$/, "") || "/";
+        const isActive = current === normalized;
+
+        return (
           <li class="shrink">
             <a
               href={href}
-              class="relative inline-block px-[clamp(0.4rem,0.8vw,0.8rem)] py-1
-                     text-neutral/700 hover:text-white transition-all duration-300 ease-out
-                     after:absolute after:left-1/2 after:-bottom-1 after:w-0 after:h-0.5
-                     after:rounded-full after:bg-linear-to-r after:from-blue-400 after:to-purple-400 
-                     after:transition-all after:duration-400 after:ease-out
-                     hover:after:w-2/3 hover:after:-translate-x-1/2 hover:scale-125"
+              data-nav-link
+              data-text={label}
+              class={[
+                "relative inline-block px-[clamp(0.4rem,0.8vw,0.8rem)] py-1",
+                "transition-all duration-300 ease-out",
+                "text-neutral-700 dark:text-white",
+
+                // underline
+                "after:absolute after:left-1/2 after:-bottom-1 after:w-0 after:h-0.5",
+                "after:rounded-full after:bg-linear-to-r after:from-blue-400 after:to-purple-400",
+                "after:transition-all after:duration-400 after:ease-out",
+
+                // hover
+                "hover:text-white hover:after:w-2/3 hover:after:-translate-x-1/2 hover:scale-125",
+
+                // glitch
+                "glitch-strong",
+
+                // active
+                isActive &&
+                  "text-white scale-110 after:w-2/3 after:-translate-x-1/2 hover:scale-125",
+              ]
+                .filter(Boolean)
+                .join(" ")}
             >
-              {label}
+
+              {isFA ? (
+                /* FA MODE — full word (ligature-safe), keeps animations */
+                <span class="wave-fa">{label}</span>
+              ) : (
+                /* EN MODE — letter wave animation preserved */
+                <span class="wave">
+                  {label.split("").map((char, i) => (
+                    <span class="wave-letter" style={`--i:${i}`}>{char}</span>
+                  ))}
+                </span>
+              )}
+
             </a>
           </li>
-        ))}
-      </ul>
-    </nav>
-
-    <!-- Phantom Spacer -->
-    <div aria-hidden="true" class="h-[3.1rem] w-[min(8rem,15vw)] shrink-0"></div>
-  </div>
+        );
+      })}
+    </ul>
+  </nav>
 </header>
-<style is:global>
-  #utility-bg.fade-out {
-    opacity: 0;
-  }
 
-  #utility-bg.expanded {
-    width: 5rem;
-     transform: translateX(-5rem) scale(0.9)
-  }
-
-  #mode-wrapper.shift-left {
-    will-change: transform;
-  }
-
-  @media (max-width: 600px) {
-    #utility-bar {
-      right: 1rem;
-    }
-  }
-
-  /* 🌙 Fade out middle navbar on small screens */
-  @media (max-width: 768px) {
-    header nav {
-      opacity: 0;
-      transform: scale(0.9);
-      pointer-events: none;
-    }
-  }
-
-@media (min-width: 769px) {
-  header nav {
-    transition: opacity 0.4s ease, transform 0.4s ease, background-color 0.3s ease-in-out;
-    /* Add background-color here ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ */
-  }
+<style>
+/* EN wave animation */
+.wave {
+  display: inline-flex;
 }
-/* 🌙 Fade out middle navbar on small screens */
-@media (max-width: 768px) {
-  header nav {
-    opacity: 0;
-    transform: scale(0.9);
-    pointer-events: none;
-    /* Add this to disable tab navigation */
-    visibility: hidden;
-  }
-  
-  /* Also disable the individual links */
-  header nav a {
-    visibility: hidden;
-  }
-}
-/* Sidebar closed - not tabbable */
-#sidebar-overlay.translate-x-full {
-  pointer-events: none;
+.wave-letter {
+  display: inline-block;
+  transition: transform 0.2s ease, color 0.3s ease;
 }
 
-/* Sidebar open - tabbable */
-#sidebar-overlay.translate-x-0 {
-  pointer-events: auto;
+/* Persian: full-word, no breaking */
+.wave-fa {
+  display: inline-block;
 }
 </style>
 
-<!-- ===================================
-     UTILITY BAR — pixel-perfect alignment with sidebar edge
-     =================================== -->
-<div
-  id="utility-bar"
-  class="fixed top-3 right-8 z-58 rounded-full 
-         flex items-center justify-center h-[3.1rem]
-         transition-all duration-500 ease-in-out group"
->
-  <!-- Capsule background with group hover -->
-  <div
-    id="utility-bg"
-    class="absolute left-1/2 -translate-x-1/2 rounded-full
-           bg-white/10 group-hover:bg-white/30 dark:group-hover:bg-black/30
-           backdrop-blur-xl shadow-lg shadow-black/10
-           transition-all duration-200 ease-in-out
-           opacity-100 w-32 h-full z-60"
-  ></div>
 
-  <!-- Icons -->
-  <div
-    id="utility-content" 
-    class="relative z-70 flex items-center gap-2 px-4
-           transition-all duration-500 ease-in-out"
-  >
-    <div id="mode-wrapper" class="transition-transform duration-500 ease-in-out">
-      <ModeToggle />
-    </div>
-    <div id="menu-wrapper">
-      <Hamburger />
-    </div>
-  </div>
-</div>
+<style>
+.wave {
+  display: inline-flex;
+}
 
+.wave-letter {
+  display: inline-block;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
 
+/* 🌊 Forward wave (default, triggered by JS) */
+.wave-active .wave-letter {
+  animation: wave-up 0.75s ease forwards;
+  animation-delay: calc(var(--i) * 90ms);
+}
 
+/* 🔄 Reverse wave (triggered by JS on mouseleave) */
+.wave-reverse .wave-letter {
+  animation: wave-down 0.75s ease forwards;
+  animation-delay: calc(var(--i) * 90ms);
+}
 
+/* 💫 Double wave (optional mode: forward → backward)
+   you can trigger by adding class="wave-double"
+*/
+.wave-double .wave-letter {
+  animation: wave-double 1.2s ease forwards;
+  animation-delay: calc(var(--i) * 100ms);
+}
 
+/* 🌈 Color shifting during wave */
+.wave-active .wave-letter,
+.wave-reverse .wave-letter,
+.wave-double .wave-letter {
+  color: var(--wave-color, #7dd3fc); /* default cyan glow */
+}
 
-<!-- ===================================
-     SIDEBAR + BACKDROP
-     =================================== -->
-  <div
-    id="sidebar-backdrop"
-    class="fixed inset-0 bg-black/40 backdrop-blur-md opacity-0 pointer-events-none
-           transition-opacity duration-500 z-55"
-  >
-  <aside
-    id="sidebar-overlay"
-    class="select-none absolute top-0 right-0 w-[min(80vw,300px)] h-full bg-white/10 dark:bg-black/40
-           border-l border-white/20 backdrop-blur-2xl backdrop-saturate-150 shadow-xl
-           flex flex-col items-center justify-center gap-6 text-white text-lg font-medium
-           transform translate-x-full transition-transform duration-500 z-60"
-    inert
-    aria-hidden="true"
-  >
-    <ul class="flex flex-col gap-6 list-none m-0 p-0">
-      {navLinks.map(([label, href]) => (
-        <li>
-          <a href={href} class="hover:text-blue-300 transition">
-            {label}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </aside>
+@keyframes wave-up {
+  0%   { transform: translateY(0); color: inherit; }
+  40%  { transform: translateY(-6px); color: #60a5fa; }  /* blue-ish */
+  60%  { transform: translateY(0); }
+  100% { transform: translateY(0); color: inherit; }
+}
 
-<!-- ===================================
-     SCRIPT — Sidebar Logic
-     =================================== -->
-<script is:inline>
-document.addEventListener("DOMContentLoaded", () => {
-  const hamburger =
-    document.querySelector("button[aria-label='Menu']") ||
-    document.querySelector("button[aria-label='Toggle menu']") ||
-    document.querySelector("#hamburger") ||
-    document.querySelector(".hamburger-btn");
+@keyframes wave-down {
+  0%   { transform: translateY(0); color: inherit; }
+  40%  { transform: translateY(6px); color: #a78bfa; }  /* purple-ish */
+  60%  { transform: translateY(0); }
+  100% { transform: translateY(0); color: inherit; }
+}
 
-  const sidebar = document.getElementById("sidebar-overlay");
-  const backdrop = document.getElementById("sidebar-backdrop");
-  const utilityBg = document.getElementById("utility-bg");
-  const modeWrapper = document.getElementById("mode-wrapper");
+/* Forward → Backward */
+@keyframes wave-double {
+  0%   { transform: translateY(0) }
+  25%  { transform: translateY(-6px) }
+  50%  { transform: translateY(0) }
+  75%  { transform: translateY(6px) }
+  100% { transform: translateY(0) }
+}
+.wave-letter.spin-blur {
+  filter: blur(1.2px);
+  opacity: 0.75;
+  transition: filter 120ms, opacity 120ms;
+}
 
-  if (!(hamburger && sidebar && backdrop && utilityBg && modeWrapper)) {
-    console.warn("[Navbar] Missing elements!");
-    return;
+@media (max-width: 768px) {
+  [data-main-nav] {
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+    visibility: hidden;
   }
-
-  const computeShift = () => {
-    const sidebarWidth = sidebar.offsetWidth || 300; // fixed fallback
-    // Move the toggle roughly the same distance as sidebar width minus a little buffer
-    // so that the toggle aligns visually with the sidebar's inner edge
-    const shiftDistance = -(sidebarWidth / 2.4); // tweak multiplier for balance
-    return shiftDistance;
-  };
-
-const openSidebar = () => {
-  sidebar.classList.remove("translate-x-full");
-  sidebar.classList.add("translate-x-0");
-  backdrop.classList.remove("opacity-0", "pointer-events-none");
-  utilityBg.classList.add("fade-out", "expanded");
-  
-  // Remove inert attribute to make tabbable
-  sidebar.removeAttribute("inert");
-  sidebar.setAttribute("aria-hidden", "false");
-  
-  const shift = computeShift();
-  modeWrapper.style.transform = `translateX(${shift}px)`;
-  
-  // Focus first link after transition
-  setTimeout(() => {
-    const firstLink = sidebar.querySelector('a');
-    if (firstLink) {
-      firstLink.focus();
-      console.log('Focused first link:', firstLink); // Debug
-    }
-  }, 300);
-};
-
-const closeSidebar = () => {
-  sidebar.classList.add("translate-x-full");
-  sidebar.classList.remove("translate-x-0");
-  backdrop.classList.add("opacity-0", "pointer-events-none");
-  utilityBg.classList.remove("fade-out", "expanded");
-  
-  // Add inert attribute to remove from tab order
-  sidebar.setAttribute("inert", "");
-  sidebar.setAttribute("aria-hidden", "true");
-  modeWrapper.style.transform = "";
-};
-
-  hamburger.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const isOpen = sidebar.classList.contains("translate-x-0");
-    isOpen ? closeSidebar("hamburger") : openSidebar();
-  });
-
-  backdrop.addEventListener("click", (e) => {
-    if (e.target === backdrop) closeSidebar("backdrop");
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeSidebar("ESC");
-  });
-
-  window.addEventListener("resize", () => {
-    if (sidebar.classList.contains("translate-x-0")) {
-      const shift = computeShift();
-      modeWrapper.style.transform = `translateX(${shift}px)`;
-    }
-  });
-});
+}
 
 
-</script>
 
+</style>
