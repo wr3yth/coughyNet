@@ -45,6 +45,20 @@ const poetry = defineCollection({
   }),
 });
 
+const storiesFa = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/stories-fa" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    file: z.string().optional(),
+    image: z.string().optional(),
+    link: z.string().optional(),
+    date: z.string().optional(),
+    published: z.boolean().default(true),
+  }),
+});
+
+
 
 
 // Export BOTH
@@ -52,4 +66,5 @@ export const collections = {
   blog,
   stories,
   poetry,
+  storiesFa,
 };

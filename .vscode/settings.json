@@ -2,5 +2,47 @@
     "workbench.colorCustomizations": {
         "minimap.background": "#00000000",
         "scrollbar.shadow": "#00000000"
-    }
+    },
+    "folder-color.pathColors": [
+        {
+            "folderPath": "coughyNet\\src\\pages\\index.astro\\",
+            "color": "foldercolorizer.color_00ccff"
+        },
+        {
+            "folderPath": "coughyNet\\src\\pages\\fa\\index.astro\\",
+            "color": "foldercolorizer.color_00cc99"
+        },
+        {
+            "folderPath": "coughyNet\\src\\pages\\fa\\",
+            "color": "foldercolorizer.color_00cc99"
+        },
+        {
+            "folderPath": "coughyNet\\src\\pages\\",
+            "color": "foldercolorizer.color_99ccff"
+        },
+        {
+            "folderPath": "coughyNet\\src\\components\\",
+            "color": "foldercolorizer.color_ff6633"
+        },
+        {
+            "folderPath": "coughyNet\\src\\content.config.ts\\",
+            "color": "foldercolorizer.color_cccc00"
+        },
+        {
+            "folderPath": "coughyNet\\src\\stories\\",
+            "color": "foldercolorizer.color_00cc99"
+        },
+        {
+            "folderPath": "coughyNet\\src\\stories\\cry_as_punishment.md\\",
+            "color": "foldercolorizer.color_00cc99"
+        },
+        {
+            "folderPath": "coughyNet\\src\\stories\\make love, not with eggs.md\\",
+            "color": "foldercolorizer.color_00cc99"
+        },
+        {
+            "folderPath": "coughyNet\\src\\layouts\\FictionLayoutFa.astro\\",
+            "color": "foldercolorizer.color_006633"
+        }
+    ]
 }

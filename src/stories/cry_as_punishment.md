@@ -37,7 +37,7 @@ I had trusted Tyler and Olivia with all my heart.
 - “Maybe… just maybe, we could give them another cha—”  
 -  “Shut. Your. God. Fucking. Damn. Mouth. I don’t want to hear a single word.”  
 - “But they—”  
--  “They’re trash. That lowlife cuck and his shameless bitch. What did I say from day one?”
+-  “Aaagh god. now you tryna defend a lowlife cuck and a shameless bitch? you could've married better people Sarah... I knew they were not decent since folks. I knew it.” 
 
 Every time I blinked, the scene came back.  
  Sharp. Vivid. Unshakable.
@@ -77,6 +77,6 @@ The sound of the plate of rice falling and shattering, *split my chest open.*
 -  “No. No. No. I don’t believe it. I just can’t.”  
 - “Sarah opened the door. We saw everything.”  
 - “You’re lying.”  
-- “I wish I was. But it’s true — the guy was screwing his own wife. In their own fucking house.”
+- “I wish I was. But it’s true — the guy was fucking his own wife. In their own fucking house.”
 
 The end.

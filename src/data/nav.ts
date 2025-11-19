@@ -22,7 +22,7 @@ export const wikiLinks: [string, string][] = [
 export const farLinks: [string, string][] = [
   ["خانه", "/fa/"],
   ["بلاگ", "/fa/blog"],
-  ["ادبیات", "/fa/literature"],
+  ["داستان", "/fa/stories"],
   ["پروژه ها", "/fa/projects"],
   ["تحقیقات", "/fa/research"],
   ["شرکا", "/fa/partners"],

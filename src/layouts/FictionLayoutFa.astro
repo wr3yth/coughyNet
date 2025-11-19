@@ -1,0 +1,104 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import { formatDate } from "../utils/formatDate";
+
+const { frontmatter, lang = "fa" } = Astro.props;
+
+// Jalali date
+const jalaliDate = frontmatter.date
+  ? formatDate(new Date(frontmatter.date), "fa")
+  : null;
+---
+
+<BaseLayout lang="fa">
+
+  <main class="px-6 py-20 max-w-3xl mx-auto direction-rtl text-right font-[Vazirmatn]">
+
+    <!-- Breadcrumb -->
+    <nav class="text-sm mb-6 opacity-70">
+      <a href="/fa/stories" class="hover:underline">
+        داستان‌ها
+      </a>
+      <span class="mx-2">/</span>
+      <span>{frontmatter.title}</span>
+    </nav>
+
+    <!-- Title -->
+    <h1 class="text-3xl font-bold mb-4 tracking-tight">
+      {frontmatter.title}
+    </h1>
+
+    <!-- Description -->
+    {frontmatter.description && (
+      <p class="opacity-80 mb-4 leading-relaxed">
+        {frontmatter.description}
+      </p>
+    )}
+
+    <!-- Date -->
+    {jalaliDate && (
+      <p class="text-sm opacity-60 mb-4">تاریخ: {jalaliDate}</p>
+    )}
+
+    <!-- External publication link (optional) -->
+    {frontmatter.link && (
+      <a
+        href={frontmatter.link}
+        class="text-blue-400 underline text-sm mb-6 block"
+      >
+        لینک انتشار
+      </a>
+    )}
+
+    <!-- PDF File (optional) -->
+    {frontmatter.file && (
+      <div class="my-6">
+        <object
+          data={`/stories-fa/${frontmatter.file}`}
+          type="application/pdf"
+          class="w-full h-[70vh] rounded-xl border border-white/20"
+        >
+          <div class="text-center text-blue-300">
+            PDF قابل نمایش نیست.
+            <a
+              href={`/stories-fa/${frontmatter.file}`}
+              class="underline ml-2"
+            >
+              دانلود فایل
+            </a>
+          </div>
+        </object>
+      </div>
+    )}
+
+    <!-- MAIN STORY CONTENT -->
+    <article
+      class="prose prose-invert max-w-none leading-[2.2] text-lg
+             bg-black/10 dark:bg-white/5 backdrop-blur-xl
+             rounded-xl p-6 sm:p-10"
+    >
+      <slot />
+    </article>
+
+  </main>
+
+</BaseLayout>
+
+<style is:global>
+  .prose p {
+    margin-top: 1.1rem;
+    margin-bottom: 1.1rem;
+  }
+
+  /* Persian text tends to need slightly taller line height */
+  .prose {
+    line-height: 2.1;
+    font-family: Vazirmatn, sans-serif;
+  }
+
+  /* Prevent indenting after headings for Persian */
+  .prose h1 + p,
+  .prose h2 + p {
+    text-indent: 0;
+  }
+</style>

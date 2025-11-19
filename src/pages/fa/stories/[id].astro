@@ -1,22 +1,52 @@
 ---
 import { getCollection, render } from "astro:content";
-import FictionLayout from "../../layouts/FictionLayout.astro";
-
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { formatDate } from "../../../utils/formatDate.ts";
+import FaFictionLayout from "../../../layouts/FictionLayoutFa.astro";
 export async function getStaticPaths() {
-  const stories = await getCollection("stories");
-  return stories.map(entry => ({
+  const stories = await getCollection("storiesFa");
+  return stories.map((entry) => ({
     params: { id: entry.id },
     props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+
+
+
+const isPDF = entry.data.file?.endsWith(".pdf");
 ---
 
-<FictionLayout frontmatter={entry.data}>
+<BaseLayout lang="fa">
 
+  <main class="px-6 py-20 max-w-3xl mx-auto text-right direction-rtl">
 
-  <Content />
+    <h1 class="text-3xl font-serif mb-6">{entry.data.title}</h1>
 
-</FictionLayout>
+    {entry.data.description && (
+      <p class="opacity-70 mb-6">{entry.data.description}</p>
+    )}
+
+    {isPDF ? (
+      <object
+        data={`/fa-stories/${entry.data.file}`}
+        type="application/pdf"
+        class="w-full h-[80vh] rounded-xl border border-white/20"
+      >
+        <a
+          href={`/fa-stories/${entry.data.file}`}
+          class="text-blue-400 underline"
+        >
+          دانلود PDF
+        </a>
+      </object>
+    ) : (
+      // markdown story
+      <article class="prose prose-invert max-w-none leading-relaxed">
+      </article>
+    )}
+
+  </main>
+
+</BaseLayout>

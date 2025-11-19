@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const projects = [
   {
@@ -30,16 +30,22 @@ const projects = [
       "My ongoing documenting of altered states of consciousness, phenomenology, and psychedelic cognition.",
     link: "/wiki"
   },
+
+    {
+    title: "LightMeNow",
+    description:
+      "web based RGB screen lighting.",
+    github: "/https://github.com/wr3yth"
+  },
 ];
 ---
 
-<BaseLayout>
+<BaseLayout lang="fa">
   <main class="w-full px-[clamp(1rem,4vw,4rem)] py-24 
                text-neutral-800 dark:text-neutral-100">
 
     <h1 class="text-4xl font-bold text-center mb-16 tracking-tight">
-      My Projects
-    </h1>
+پروژه ها    </h1>
 
     <div
       class="grid gap-10 
@@ -77,7 +83,7 @@ const projects = [
                        transition-all"
                 target="_blank"
               >
-                Link
+                لینک
               </a>
             )}
 
@@ -91,7 +97,7 @@ const projects = [
                        transition-all"
                 target="_blank"
               >
-                GitHub
+                گیت‌هاب
               </a>
             )}
 
@@ -105,14 +111,21 @@ const projects = [
                        transition-all"
                 target="_blank"
               >
-                Live Demo
-              </a>
+دموی زنده              </a>
             )}
 
           </div>
         </div>
       ))}
     </div>
-
+  <!-- QUOTE -->
+  <section dir="rtl" class="relative z-10 mb-10 mt-110 pb-10 px-6 flex justify-center">
+    <blockquote
+      class="max-w-3xl text-center text-xl md:text-2xl font-light
+             opacity-80 leading-relaxed italic"
+    >
+ترجیح می‌دهم در خانه بنشینم و به کفش‌هایم فکر کنم<br>
+<i class="text-lg jus">-دکتر علی شریعتی</i></blockquote>
+  </section>
   </main>
 </BaseLayout>

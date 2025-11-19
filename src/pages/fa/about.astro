@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout lang="fa">
+
+  <main class="px-[clamp(1rem,4vw,4rem)] py-24 
+               text-neutral-800 dark:text-neutral-100
+               max-w-4xl mx-auto leading-relaxed">
+
+    <!-- Heading -->
+    <h1 class="text-4xl font-bold mb-12 tracking-tight text-center">
+      About Me
+    </h1>
+
+    <!-- Card -->
+    <section
+      class="rounded-3xl p-8 mb-20
+             bg-white/10 dark:bg-black/20 backdrop-blur-xl
+             border border-white/20 shadow-xl
+             transition-all">
+
+      <h2 class="text-2xl font-semibold mb-6">Hi, I’m Ali Ghorbani AKA “Coughy”</h2>
+
+      <p class="mb-6">
+        I write fiction, poetry, research papers, and develop experimental tools across
+        philosophy, linguistics, computation, and consciousness studies.  
+        My work spans many domains, but all share the same theme:
+        <strong>breaking inherited structures</strong> — whether linguistic, conceptual, or computational — 
+        to see what grows in the cracks.
+      </p>
+
+      <p class="mb-6">
+        I explore intersections between human cognition, altered states, language, and
+        machine intelligence. I also build software tools, write experimental poetry,
+        and maintain <a href="/wiki" class="text-blue-600 dark:text-blue-400 underline">my online wiki</a>
+        documenting altered states of consciousness.
+      </p>
+
+      <p class="mb-6">
+        Some of my projects include:
+      </p>
+
+      <ul class="list-disc pl-6 space-y-2 mb-6">
+        <li><strong>Contraculator</strong> — a philosophical numerical system.</li>
+        <li><strong>Flatshot</strong> — flatten entire codebases for AI processing.</li>
+        <li>
+          <strong>Fa_Docs</strong> — a Persian typography extension for Google Docs.
+        </li>
+        <li>
+          <strong>Enpsyclopedia</strong> — a conceptual database on consciousness.
+        </li>
+      </ul>
+
+      <p class="mb-6">
+        My work often mixes formal structure with surrealistic or playful elements.
+        Whether in code or poetry, I focus on <strong>rewiring assumptions</strong> —
+        seeing what happens when you loosen a system from its historical constraints.
+      </p>
+
+      <p class="opacity-70">
+        If you'd like to collaborate, talk, or ask questions:
+        you can find me on Twitter, GitHub, or Telegram.
+      </p>
+
+    </section>
+
+    <!-- Optional Portrait / Photo Block 
+    <section
+      class="w-full rounded-3xl overflow-hidden 
+             bg-white/10 dark:bg-black/20 backdrop-blur-xl
+             border border-white/20 shadow-xl">
+      <img 
+        src="/images/profile-placeholder.jpg"
+        alt="Ali Ghorbani"
+        class="w-full h-80 object-cover opacity-90"
+      />
+    </section>-->
+
+  </main>
+
+</BaseLayout>
