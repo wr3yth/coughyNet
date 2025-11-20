@@ -2,10 +2,10 @@
 title: 'aMT'
 slug: "amt"
 lang: "en"
-category: ''
+category: "Base Tryptamines"
 weight: 1000
 template: "wiki"
-summary: ''
+summary: "tryptamines"
 ---
 
 # aMT

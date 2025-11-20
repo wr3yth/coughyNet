@@ -70,7 +70,7 @@ const wiki = defineCollection({
 });
 
 const wikiFa = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/wiki-fa" }),
+  loader: glob({ pattern: "**/*.md", base: "./src/wiki" }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),

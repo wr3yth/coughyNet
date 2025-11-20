@@ -2,10 +2,10 @@
 title: 'DPT'
 slug: "dpt"
 lang: "en"
-category: ''
+category: "Base Tryptamines"
 weight: 1000
 template: "wiki"
-summary: ''
+summary: "tryptamines"
 ---
 
 # DPT
