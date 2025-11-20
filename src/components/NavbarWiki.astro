@@ -1,0 +1,149 @@
+---
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  navLinks: NavItem[] | [string, string][];
+  lang?: "en" | "fa";
+}
+
+function normalizeNavLinks(raw: Props["navLinks"]) {
+  return raw.map((item) => {
+    if (Array.isArray(item)) return { label: item[0], href: item[1] };
+    return item as NavItem;
+  });
+}
+
+const { navLinks, lang = "en" } = Astro.props as Props;
+const isFA = lang === "fa";
+
+const links = normalizeNavLinks(navLinks);
+const current = Astro.url.pathname.replace(/\/+$/, "") || "/";
+---
+
+<script src="/scripts/nav-effects.js" defer></script>
+
+<header
+  class={[
+    "fixed top-3 left-0 right-0 z-50",
+    "text-neutral-700 dark:text-neutral-100",
+    "font-medium tracking-tight select-none",
+    "transition-colors duration-500 ease-in-out",
+    isFA && "direction-rtl text-right",
+  ].join(" ")}
+>
+
+  <nav
+    data-main-nav
+    class={[
+      // 🔥 Wiki style: softer, flatter, more academic
+      "relative justify-self-center flex items-center justify-center h-[3.1rem]",
+      "px-[clamp(0.6rem,1.2vw,1.2rem)] max-w-[1100px] w-full rounded-full",
+      "bg-white/10 dark:bg-black/20",
+      "border border-white/20 dark:border-white/10",
+      "backdrop-blur-xl shadow-md shadow-black/10",
+      "hover:bg-white/20 dark:hover:bg-black/30",
+      "transition-all duration-300 ease-in-out min-w-0 overflow-hidden",
+      isFA && "flex-row-reverse",
+    ].join(" ")}
+    aria-label="Wiki Navigation"
+  >
+
+    <ul
+      class={[
+        "flex justify-center items-center flex-nowrap",
+        "gap-[clamp(0.3rem,1.2vw,1.8rem)] list-none m-0 p-0",
+        isFA && "flex-row-reverse",
+      ].join(" ")}
+    >
+
+      {links.map(({ label, href }) => {
+        const normalized = href.replace(/\/+$/, "") || "/";
+        const isActive = current === normalized;
+
+        return (
+          <li class="shrink">
+            <a
+              href={href}
+              data-nav-link
+              data-text={label}
+              class={[
+                "relative inline-block px-[0.6rem] py-1",
+                "transition-all duration-300 ease-out",
+                "text-neutral-700 dark:text-neutral-100",
+
+                // 🔥 Wiki underline — thinner, more elegant
+                "after:absolute after:left-1/2 after:-bottom-0.5 after:w-0 after:h-px",
+                "after:bg-neutral-700/40 dark:after:bg-neutral-100/40",
+                "after:rounded-full after:transition-all after:duration-300",
+
+                // Hover
+                "hover:after:w-2/3 hover:after:-translate-x-1/2",
+                "hover:text-neutral-900 dark:hover:text-white",
+                "hover:opacity-90",
+
+                // 🔥 Removed loud hover scaling
+                // "hover:scale-125" → removed for academic tone
+
+                // Disabled glitch
+                // "glitch-strong" → removed
+
+                // Active
+                isActive &&
+                  "text-white after:w-2/3 after:-translate-x-1/2 opacity-100",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
+
+              {isFA ? (
+                <span class="wiki-fa">{label}</span>
+              ) : (
+                <span class="wiki-en">{label}</span>
+              )}
+
+            </a>
+          </li>
+        );
+      })}
+
+    </ul>
+  </nav>
+</header>
+
+<style>
+/* ========== ENGLISH STYLE (Wiki) ========== */
+.wiki-en {
+  font-family: "Noto Serif", serif;
+  letter-spacing: 0.3px;
+}
+
+/* ========== PERSIAN STYLE (Wiki) ========== */
+.wiki-fa {
+  font-family: "Noto Serif", serif;
+  font-weight: 500;
+}
+
+/* Remove wave animations from wiki version */
+.wave,
+.wave-letter,
+.wave-active,
+.wave-reverse,
+.wave-double {
+  animation: none !important;
+  transform: none !important;
+}
+</style>
+
+<style>
+@media (max-width: 768px) {
+  [data-main-nav] {
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+</style>

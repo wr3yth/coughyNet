@@ -16,10 +16,26 @@ function normalizeNavLinks(raw: Props["navLinks"]) {
   });
 }
 
-const { navLinks, lang = "en" } = Astro.props as Props;
-const isFA = lang === "fa";
+// Auto-detect language from URL
+const pathname = Astro.url.pathname;
+const isWiki = pathname.startsWith("/wiki") || pathname.startsWith("/fa/wiki");
+const isFA = pathname.startsWith("/fa/");
 
-const links = normalizeNavLinks(navLinks);
+// Import all link sets 
+import { navLinks, farLinks, wikiLinks, farWikiLinks } from "../data/nav";
+
+// Decide which set to use
+let rawLinks;
+
+if (isWiki) {
+  rawLinks = isFA ? farWikiLinks : wikiLinks;
+} else {
+  rawLinks = isFA ? farLinks : navLinks;
+}
+
+// Normalize
+const links = normalizeNavLinks(rawLinks);
+
 
 // normalize current path
 const current = Astro.url.pathname.replace(/\/+$/, "") || "/";

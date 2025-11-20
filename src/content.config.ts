@@ -58,13 +58,36 @@ const storiesFa = defineCollection({
   }),
 });
 
+const wiki = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/wiki" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    category: z.string().optional(),   // perception, states, tools...
+    tags: z.array(z.string()).optional(),
+    image: z.string().optional(),
+  }),
+});
+
+const wikiFa = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/wiki-fa" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    category: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    image: z.string().optional(),
+  }),
+});
 
 
 
-// Export BOTH
+
 export const collections = {
   blog,
   stories,
   poetry,
   storiesFa,
+  wiki,
+  wikiFa,
 };

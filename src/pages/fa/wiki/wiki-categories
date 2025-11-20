@@ -1,0 +1,17 @@
+export const wikiStructure = {
+  "Consciousness": {
+    "Perception": [],
+    "States": [],
+    "Self Models": [],
+    "Memory": [],
+  },
+  "Psychedelics": {
+    "Substances": [],
+    "Mechanisms": [],
+    "Interactions": [],
+  },
+  "Philosophy": {
+    "Metaphysics": [],
+    "Epistemology": [],
+  },
+};

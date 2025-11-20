@@ -30,7 +30,7 @@ export const farLinks: [string, string][] = [
   ["درباره", "/fa/about"],
 ]as const;
  
-export const farWikiLinksinks: [string, string][] = [
+export const farWikiLinks: [string, string][] = [
   ["مواد", "/fa/wiki/substances"],
   ["تأثیرات", "/fa/wiki/effects"],
   ["تداخلات", "/fa/wiki/interactions"],

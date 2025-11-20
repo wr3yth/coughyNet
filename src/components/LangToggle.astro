@@ -10,7 +10,7 @@
     id="icon-en"
     class="absolute text-sm font-bold transition-all duration-500"
   >
-    EN
+    فا
   </span>
 
   <!-- FA icon -->
@@ -18,19 +18,17 @@
     id="icon-fa"
     class="absolute text-sm font-bold transition-all duration-500"
   >
-    فا
+    en
   </span>
 </button>
 
-
 <script is:inline>
   ;(() => {
-    // Detect from storage or current URL
-    const stored = localStorage.getItem("lang");
     const urlLang = location.pathname.startsWith("/fa") ? "fa" : "en";
-    const lang = stored || urlLang;
 
-    // Preload icon state
+    // THE REAL FINAL SOURCE OF TRUTH
+    const lang = urlLang;
+
     const css = `
       #icon-en {
         opacity: ${lang === "en" ? "1" : "0"};
@@ -47,7 +45,6 @@
   })();
 </script>
 
-
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("lang-toggle")!;
@@ -63,24 +60,19 @@
     };
 
     btn.addEventListener("click", () => {
-      const path = location.pathname;
-      const isFA = path.startsWith("/fa");
-
-      let newPath = "";
-
+      const isFA = location.pathname.startsWith("/fa");
+      let newPath;
+    
       if (isFA) {
         // FA → EN
-        newPath = path.replace(/^\/fa/, "") || "/";
+        newPath = location.pathname.replace(/^\/fa/, "") || "/";
         localStorage.setItem("lang", "en");
-        animateIcons(false);
       } else {
         // EN → FA
-        newPath = "/fa" + (path === "/" ? "" : path);
+        newPath = "/fa" + (location.pathname === "/" ? "" : location.pathname);
         localStorage.setItem("lang", "fa");
-        animateIcons(true);
       }
-
-      // Navigate
+    
       window.location.href = newPath;
     });
   });

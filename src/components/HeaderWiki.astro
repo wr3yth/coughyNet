@@ -1,0 +1,57 @@
+---
+import BrandBadge from "./BrandBadgeWiki.astro";
+import Navbar from "./Navbar.astro";
+import UtilityBar from "./UtilityBar.astro";
+import SidebarMenu from "./SidebarMenu.astro";
+import { farWikiLinks, wikiLinks } from "../data/nav";
+
+const { lang = "en" } = Astro.props;
+const links = lang === "fa" ? farWikiLinks : wikiLinks;
+const isFA = lang === "fa";
+
+
+---
+
+
+
+<!-- BRAND: fixed top left -->
+<BrandBadge lang={lang} />
+
+
+<!-- HEADER containing Navbar in proper grid -->
+<header lang={lang}
+  class={[
+    "fixed top-3 left-0 right-0 z-50",
+    "text-neutral-700 dark:text-white font-medium tracking-tight",
+    "transition-color-scale duration-500 ease-in-out select-none",
+  ].join(" ")}
+>
+
+  <div
+    class="mx-auto w-full max-w-7xl
+           px-[clamp(1rem,3vw,2.5rem)]
+           grid grid-cols-[auto_1fr_auto] items-center gap-4"
+  >
+    <!-- LEFT SPACER -->
+    <div aria-hidden="true" class="h-[2.7rem]"></div>
+
+    <!-- NAVBAR CENTERED -->
+    <Navbar navLinks={links} lang={lang} />
+
+
+    <!-- RIGHT SPACER (balances utility bar) -->
+    <div aria-hidden="true" class="h-[2.7rem]"></div>
+  </div>
+</header>
+
+
+<!-- UTILITY BAR (top-right, fixed) -->
+<UtilityBar />
+
+
+<!-- SIDEBAR MENU -->
+<SidebarMenu navLinks={links} lang={lang} />
+
+
+<!-- NAVBAR JS -->
+<script src="/scripts/navbar.js" defer></script>

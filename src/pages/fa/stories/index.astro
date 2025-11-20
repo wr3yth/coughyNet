@@ -5,82 +5,149 @@ import { formatDate } from "../../../utils/formatDate";
 
 const stories = await getCollection("storiesFa");
 
-// Sort newest → oldest
+// Sort by date newest → oldest
 stories.sort((a, b) => {
-  const da = new Date(a.data.date || 0);
-  const db = new Date(b.data.date || 0);
+  const da = new Date(a.data.date ?? 0).getTime();
+  const db = new Date(b.data.date ?? 0).getTime();
   return db - da;
 });
+
+
+// Split into two groups
+const published = stories.filter((s) => s.data.published === true);
+const drafts = stories.filter((s) => !s.data.published);
 ---
 
-<BaseLayout lang="fa">
+<BaseLayout lang="fa" pageTitle="داستان‌ها">
 
   <main class="px-6 py-20 max-w-5xl mx-auto direction-rtl text-right">
 
-    <!-- Title -->
     <h1 class="text-4xl font-bold mb-12">داستان‌ها</h1>
 
-    <!-- Responsive Grid -->
-    <div 
-      class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 
-             auto-rows-[1fr] items-start"
-    >
-      {stories.map((story) => (
-        <a
-          href={`/pdf/${story.id}.pdf`}
-          class="group block rounded-2xl overflow-hidden
-                 bg-white/10 dark:bg-white/5 
-                 border border-white/20 backdrop-blur-xl shadow-lg
-                 hover:-translate-y-1 hover:shadow-2xl
-                 transition-all duration-300"
-        >
 
-          <!-- Image Section (optional) -->
-          {story.data.image ? (
-            <div class="relative w-full h-full overflow-hidden">
-              <img
-                src={story.data.image}
-                alt={story.data.title}
-                class="w-full h-full mx-auto  rounded-lg shadow-md max-h-80 object-contain
-                       group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-          ) : (
-            <div 
-              class="w-full h-48 bg-linear-to-br from-purple-600/20 
-                     to-blue-600/20 flex items-center justify-center
-                     text-5xl opacity-30"
+    <!-- ============================= -->
+    <!--        PUBLISHED STORIES      -->
+    <!-- ============================= -->
+    {published.length > 0 && (
+      <section class="mb-16">
+        <h2 class="text-2xl font-semibold mb-6 opacity-90">
+          منتشر شده
+        </h2>
+
+        <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 auto-rows-[1fr]">
+          {published.map((story) => (
+            <a
+              href={`/fa/story/${story.id}`}
+              class="group block rounded-2xl overflow-hidden
+                     bg-white/10 dark:bg-white/5 
+                     border border-white/20 backdrop-blur-xl shadow-lg
+                     hover:-translate-y-1 hover:shadow-2xl
+                     transition-all duration-300"
             >
-              📘
-            </div>
-          )}
-
-          <!-- Text Section -->
-          <div class="p-6">
-
-            <!-- Story Title -->
-            <h2 class="text-xl font-semibold mb-3 group-hover:opacity-80">
-              {story.data.title}
-            </h2>
-
-            <!-- Description -->
-            {story.data.description && (
-              <p class="opacity-70 mb-3 text-sm leading-relaxed line-clamp-3">
-                {story.data.description}
-              </p>
+            {story.data.image ? (
+              <div class="w-full overflow-hidden rounded-t-2xl">
+                <img
+                  src={story.data.image}
+                  alt={story.data.title}
+                  class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            ) : (
+              <div 
+                class="w-full aspect-4/3 bg-linear-to-br from-purple-600/20 
+                       to-blue-600/20 flex items-center justify-center
+                       text-5xl opacity-30"
+              >
+                📘
+              </div>
             )}
 
-            <!-- Date -->
-            {story.data.date && (
-              <p class="text-xs opacity-60 mt-auto">
-                {formatDate(new Date(story.data.date), "fa")}
-              </p>
-            )}
-          </div>
 
-        </a>
-      ))}
-    </div>
+              <div class="p-6">
+                <h3 class="text-xl font-semibold mb-3 group-hover:opacity-80">
+                  {story.data.title}
+                </h3>
+
+                {story.data.description && (
+                  <p class="opacity-70 mb-3 text-sm leading-relaxed line-clamp-3">
+                    {story.data.description}
+                  </p>
+                )}
+
+                {story.data.date && (
+                  <p class="text-xs opacity-60">
+                    {formatDate(new Date(story.data.date), "fa")}
+                  </p>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+
+    <!-- ============================= -->
+    <!--      UNPUBLISHED STORIES      -->
+    <!-- ============================= -->
+    {drafts.length > 0 && (
+      <section class="mb-10">
+        <h2 class="text-2xl font-semibold mb-6 opacity-60">
+          منتشر نشده / پیش‌نویس
+        </h2>
+
+        <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 auto-rows-[1fr]">
+          {drafts.map((story) => (
+            <a
+              href={`/fa/story/${story.id}`}
+              class="group block rounded-2xl overflow-hidden
+                     bg-white/5 dark:bg-black/20
+                     border border-white/10 backdrop-blur-xl shadow-lg
+                     hover:-translate-y-1 hover:shadow-2xl
+                     transition-all duration-300 opacity-75 hover:opacity-100"
+            >
+          {story.data.image ? (
+              <div class="w-full overflow-hidden rounded-t-2xl">
+                <img
+                  src={story.data.image}
+                  alt={story.data.title}
+                  class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            ) : (
+              <div 
+                class="w-full aspect-4/3 bg-linear-to-br from-purple-600/20 
+                       to-blue-600/20 flex items-center justify-center
+                       text-5xl opacity-30"
+              >
+                📘
+              </div>
+            )}
+            
+          
+
+              <div class="p-6">
+                <h3 class="text-xl font-semibold mb-3 group-hover:opacity-80">
+                  {story.data.title}
+                </h3>
+
+                {story.data.description && (
+                  <p class="opacity-70 mb-3 text-sm leading-relaxed line-clamp-3">
+                    {story.data.description}
+                  </p>
+                )}
+
+                {story.data.date && (
+                  <p class="text-xs opacity-60">
+                    {formatDate(new Date(story.data.date), "fa")}
+                  </p>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
 
   </main>
 

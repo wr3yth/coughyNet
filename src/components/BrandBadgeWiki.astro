@@ -1,0 +1,35 @@
+---
+import LangToggle from "./LangToggle.astro";
+
+// AUTO-DETECT from URL (correct)
+const pathname = Astro.url.pathname;
+const isFA = pathname.startsWith("/fa/");
+const wikiHome = isFA ? "/fa/wiki" : "/wiki";
+---
+
+<div class="fixed top-3 left-3 z-200 pointer-events-none">
+  <div
+    class="relative pointer-events-auto flex items-center gap-2
+           h-[3.1rem] px-[clamp(0.9rem,1.2vw,1.2rem)] 
+           rounded-full"
+  >
+    <div
+      class="absolute inset-0 rounded-full 
+             transition-color-scale duration-300 ease-out z-10"
+    ></div>
+
+    <a
+      href={wikiHome}
+      class="relative z-210 font-semibold select-none
+             text-[clamp(1.08rem,1.35vw,1.45rem)]
+             whitespace-nowrap hover:scale-105 duration-500"
+    >
+      Coughy's Wiki
+    </a>
+
+    <div class="relative z-210 ml-1">
+      <LangToggle />
+    </div>
+
+  </div>
+</div>

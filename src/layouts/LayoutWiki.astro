@@ -1,0 +1,52 @@
+---
+import Background from "../components/Astrogen.astro";
+import Header from "../components/HeaderWiki.astro";
+import "../styles/global.css";
+const {
+  pageTitle,
+  lang = "en",     // 'en' or 'fa'
+  pageClass = "",  // optional page-specific classes
+} = Astro.props;
+---
+
+<html lang={lang} class="transition-none">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <slot name="head" />
+
+    <!-- Unicode-friendly fonts -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif&family=Noto+Sans+Symbols+2&display=swap"
+    />
+
+    <!-- Pre-paint theme -->
+    <script is:inline>
+      const isDark = localStorage.theme === "dark"
+        || (!("theme" in localStorage)
+            && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+      document.documentElement.classList.toggle("dark", isDark);
+    </script>
+
+    <!-- Remove transition lock -->
+    <script is:inline>
+      window.addEventListener("load", () => {
+        document.documentElement.classList.remove("transition-none");
+      });
+    </script>
+  </head>
+
+  <body>
+    <Background />
+    <Header lang={lang}/>
+
+    <main class="px-4 pt-20 pb-20 max-w-3xl mx-auto text-neutral-800 dark:text-neutral-100 leading-relaxed">
+      
+
+      <slot />
+
+    </main>
+  </body>
+</html>
