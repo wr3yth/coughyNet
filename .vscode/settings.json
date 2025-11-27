@@ -43,6 +43,10 @@
         {
             "folderPath": "coughyNet\\src\\layouts\\FictionLayoutFa.astro\\",
             "color": "foldercolorizer.color_006633"
+        },
+        {
+            "folderPath": "coughyNet\\src\\pages\\wiki\\",
+            "color": "foldercolorizer.color_996699"
         }
     ]
 }

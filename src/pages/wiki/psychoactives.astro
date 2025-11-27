@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../../layouts/LayoutWiki.astro";
+import { getCollection } from "astro:content";
+import WikiTree from "../../components/WikiTree.astro";
+
+const all = await getCollection("wiki");
+
+// English only
+const entries = all.filter((e) => !e.id.endsWith(".fa"));
+
+const effectEntries = entries.filter((e) =>
+  e.filePath?.includes("/Psychoactive_Effects/")
+);
+
+const psychoactiveEntries = entries.filter((e) =>
+  e.filePath?.includes("/Psychoactives/")
+);
+---
+
+<BaseLayout pageTitle="Coughy's Wiki">
+  <main class="w-full px-6 lg:px-10 py-16 lg:py-24 max-w-8xl mx-auto">
+    <header class="mb-14">
+      <h1 class="text-4xl lg:text-5xl font-bold mb-4">
+        Coughy’s Encyclopedia of Consciousness
+      </h1>
+      <p class="opacity-80 max-w-2xl">
+        An encyclopedia of consciousness — concepts, states, tools, and maps.
+      </p>
+    </header>
+    
+    <section>
+      <h2 class="text-2xl lg:text-3xl font-semibold mb-4">
+        Psychoactives
+      </h2>
+      <p class="opacity-75 mb-6 max-w-3xl">
+        Chemical families and preparations which alter consciousness — psychedelics, dissociatives, stimulants, depressants, nootropics.
+      </p>
+
+      <WikiTree entries={entries} rootFolder="Psychoactives" />
+
+    </section>
+  </main>
+</BaseLayout>

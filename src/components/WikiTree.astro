@@ -1,0 +1,278 @@
+---
+/**
+ * Props:
+ *   entries: wiki entries (English only)
+ *   rootFolder: top-level folder under src/wiki (e.g. "Psychoactives" or "Psychoactive_Effects")
+ */
+
+const { entries, rootFolder } = Astro.props as {
+  entries: any[];
+  rootFolder: string;
+};
+
+type Node = {
+  indexEntry: any | null;
+  pages: any[];
+  children: Record<string, Node>;
+};
+
+function normalizeName(str: string | null | undefined): string {
+  if (!str) return "";
+  return str
+    .toLowerCase()
+    .replace(/\.fa\.md$/, "")
+    .replace(/\.fa$/, "")
+    .replace(/\.md$/, "")
+    .replace(/[_\-]+/g, " ")
+    .trim();
+}
+
+function label(str: string): string {
+  return str
+    .replace(/[_\-]+/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function escapeHtml(str: string): string {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+/** Build full unlimited-depth tree from filePath */
+function buildTree(entries: any[]): Node {
+  const root: Node = { indexEntry: null, pages: [], children: {} };
+
+  for (const entry of entries) {
+    const filePath: string = entry.filePath;
+    if (!filePath) continue;
+
+    const parts = filePath.split("/");
+
+    // ["src","wiki","Psychoactives","Hallucinogens","Psychedelics",...,"dmt.md"]
+    const wikiParts = parts.slice(2);
+    if (wikiParts.length === 0) continue;
+
+    const filename = wikiParts[wikiParts.length - 1]!;
+    const baseName = filename.replace(/\.fa\.md$/, "").replace(/\.md$/, "");
+
+    const folders = wikiParts.slice(0, -1); // folders only
+
+    let node = root;
+    for (const folder of folders) {
+      if (!node.children[folder]) {
+        node.children[folder] = {
+          indexEntry: null,
+          pages: [],
+          children: {},
+        };
+      }
+      node = node.children[folder];
+    }
+
+    const lastFolder = folders[folders.length - 1] ?? "";
+    if (normalizeName(lastFolder) === normalizeName(baseName)) {
+      // Folder index page: e.g. Psychoactives/Tryptamines/tryptamines.md
+      node.indexEntry = entry;
+    } else {
+      // Regular article in this folder
+      node.pages.push(entry);
+    }
+  }
+
+  return root;
+}
+
+/** Sort pages and children recursively by title / key */
+function sortTree(node: Node | undefined): void {
+  if (!node) return;
+
+  node.pages.sort((a, b) =>
+    (a.data?.title ?? a.id).localeCompare(b.data?.title ?? b.id)
+  );
+
+  for (const child of Object.values(node.children)) {
+    sortTree(child);
+  }
+}
+
+const fullTree = buildTree(entries);
+
+// Node representing the given root folder (e.g. "Psychoactives")
+const rootNode: Node = fullTree.children[rootFolder] ?? fullTree;
+
+sortTree(rootNode);
+
+/** Render a subfolder (used INSIDE cards, not for the card itself) */
+function renderSubfolder(
+  name: string,
+  node: Node,
+  depth: number
+): string {
+  const isPsychoactive = rootFolder.toLowerCase().includes("psycho");
+
+  // For psychoactives → treemap-like nested blocks
+  if (isPsychoactive) {
+    const bg =
+      depth === 0
+        ? "bg-white/5"
+        : depth === 1
+        ? "bg-white/10"
+        : "bg-white/5";
+
+    let html = `<section class="rounded-xl ${bg} border border-white/10 p-3 mb-3 shadow-inner">`;
+
+    // Heading
+    const lbl = escapeHtml(label(name));
+    if (node.indexEntry) {
+      html += `
+        <h4 class="text-sm font-semibold mb-2">
+          <a href="/wiki/${node.indexEntry.id}" class="hover:underline underline-offset-2 hover:opacity-80">
+            ${lbl}
+          </a>
+        </h4>`;
+    } else {
+      html += `<h4 class="text-sm font-semibold mb-2">${lbl}</h4>`;
+    }
+
+    // Pages inside this block
+    if (node.pages.length > 0) {
+      html += `<ul class="space-y-0.5 text-sm mb-2">`;
+      for (const page of node.pages) {
+        const title = escapeHtml(page.data?.title ?? page.id);
+        html += `<li>
+          <a href="/wiki/${page.id}" class="hover:underline underline-offset-2 hover:opacity-80">
+            ${title}
+          </a>
+        </li>`;
+      }
+      html += `</ul>`;
+    }
+
+    // Subfolders → stacked treemap blocks
+    const children = Object.entries(node.children).sort(([a], [b]) =>
+      a.localeCompare(b)
+    );
+    for (const [childName, childNode] of children) {
+      html += renderSubfolder(childName, childNode, depth + 1);
+    }
+
+    html += `</section>`;
+    return html;
+  }
+
+  // === ORIGINAL LAYOUT FOR EFFECTS (unchanged) ===
+  const indentClass =
+    depth === 0 ? "" : `ml-${Math.min(depth * 3, 12)} border-l pl-3`;
+
+  const Tag = depth === 0 ? "h4" : depth === 1 ? "h5" : "h6";
+  const headingClass =
+    depth === 0
+      ? "text-sm font-semibold mb-1"
+      : "text-xs font-semibold mb-1";
+
+  let html = `<section class="${indentClass} mb-2">`;
+
+  const lbl = escapeHtml(label(name));
+  if (node.indexEntry) {
+    html += `<${Tag} class="${headingClass}">
+      <a href="/wiki/${node.indexEntry.id}" class="hover:underline underline-offset-2">${lbl}</a>
+    </${Tag}>`;
+  } else {
+    html += `<${Tag} class="${headingClass}">${lbl}</${Tag}>`;
+  }
+
+  if (node.pages.length > 0) {
+    html += `<ul class="ml-4 space-y-0.5 text-sm">`;
+    for (const page of node.pages) {
+      const title = escapeHtml(page.data?.title ?? page.id);
+      html += `<li>
+        <a href="/wiki/${page.id}" class="hover:underline underline-offset-2 hover:opacity-80">
+          ${title}
+        </a>
+      </li>`;
+    }
+    html += `</ul>`;
+  }
+
+  const children = Object.entries(node.children).sort(([a], [b]) =>
+    a.localeCompare(b)
+  );
+
+  for (const [childName, childNode] of children) {
+    html += renderSubfolder(childName, childNode, depth + 1);
+  }
+
+  html += `</section>`;
+  return html;
+}
+
+
+/** Render the INSIDE of a card: its pages + all subfolders */
+function renderCardBody(node: Node): string {
+  let html = "";
+
+  // (1) Pages directly in this card's folder (excluding the index page)
+  if (node.pages.length > 0) {
+    html += `<ul class="space-y-0.5 text-sm mb-3">`;
+    for (const page of node.pages) {
+      const title = escapeHtml(page.data?.title ?? page.id);
+      html += `<li>
+        <a href="/wiki/${page.id}" class="hover:underline underline-offset-2 hover:opacity-80">
+          ${title}
+        </a>
+      </li>`;
+    }
+    html += `</ul>`;
+  }
+
+  // (2) Subfolders inside this folder
+  const children = Object.entries(node.children) as [string, Node][];
+  children.sort(([a], [b]) => a.localeCompare(b));
+
+  for (const [childName, childNode] of children) {
+    html += renderSubfolder(childName, childNode, 0);
+  }
+
+  return html;
+}
+
+// Depth-1 children under the root folder become cards
+const topCards = Object.entries(rootNode.children) as [string, Node][];
+topCards.sort(([a], [b]) => a.localeCompare(b));
+---
+
+<!-- Responsive auto-fit card grid -->
+<div
+  class="grid gap-8"
+  style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));"
+>
+  {topCards.map(([name, node]) => (
+    <article
+      class="rounded-2xl bg-white/10 dark:bg-white/5 border border-white/10 backdrop-blur-xl shadow-xl p-5"
+    >
+      <!-- Card title = folder name, linked to its index page if present -->
+      <h3 class="text-lg font-semibold mb-3">
+        {node.indexEntry ? (
+          <a
+            href={`/wiki/${node.indexEntry.id}`}
+            class="hover:underline underline-offset-2 hover:opacity-80"
+          >
+            {label(name)}
+          </a>
+        ) : (
+          label(name)
+        )}
+      </h3>
+
+      <!-- Card content = pages + nested subfolders (NO duplicate main heading) -->
+      <div
+        class="space-y-2 text-sm"
+        set:html={renderCardBody(node)}
+      ></div>
+    </article>
+  ))}
+</div>

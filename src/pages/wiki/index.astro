@@ -1,58 +1,109 @@
 ---
 import BaseLayout from "../../layouts/LayoutWiki.astro";
-import { getCollection } from "astro:content";
-
-const entries = await getCollection("wiki");
-
-// Group by category
-const byCategory = new Map<string, typeof entries>();
-
-for (const entry of entries) {
-  const cat = entry.data.category || "Uncategorized";
-  if (!byCategory.has(cat)) byCategory.set(cat, []);
-  byCategory.get(cat)!.push(entry);
-}
 ---
 
-<BaseLayout pageTitle="Coughy's Wiki">
+<BaseLayout pageTitle="Coughy's Encyclopedia of Consciousness">
+  <main class="w-full px-6 lg:px-10 py-20 lg:py-28 max-w-7xl mx-auto">
 
-  <main class="px-6 py-20 max-w-5xl mx-auto leading-relaxed">
-    <h1 class="text-4xl font-bold mb-6">Coughy’s Wiki</h1>
-    <p class="opacity-80 mb-10">
-      An encyclopedia of consciousness — concepts, states, tools, and maps.
-    </p>
+    <!-- HERO SECTION -->
+    <section class="mb-20 text-center">
+      <h1 class="text-5xl lg:text-6xl font-bold mb-6">
+        Coughy’s Encyclopedia of Consciousness
+      </h1>
 
-    <div class="space-y-12">
-      {Array.from(byCategory.entries()).map(([category, items]) => (
-        <section>
-          <h2 class="text-2xl font-semibold mb-4 opacity-90">
-            {category}
-          </h2>
+      <p class="opacity-80 text-lg max-w-3xl mx-auto leading-relaxed">
+        A continuously expanding knowledgebase of altered states, psychoactive
+        substances, phenomenological effects, and cognitive models of 
+        consciousness.
+      </p>
+    </section>
 
-          <div class="grid gap-6 sm:grid-cols-2">
-            {items.map((entry) => (
-              <a
-                href={`/wiki/${entry.id}`}  // 🔥 flat URL here
-                class="group block rounded-2xl p-5
-                       bg-white/10 dark:bg-white/5
-                       border border-white/20 backdrop-blur-xl shadow-lg
-                       hover:-translate-y-1 hover:shadow-2xl
-                       transition-all duration-300"
-              >
-                <h3 class="text-lg font-semibold mb-2 group-hover:opacity-80">
-                  {entry.data.title}
-                </h3>
-                {entry.data.description && (
-                  <p class="opacity-70 text-sm leading-relaxed line-clamp-3">
-                    {entry.data.description}
-                  </p>
-                )}
-              </a>
-            ))}
+    <!-- CATEGORY GRID -->
+    <section>
+      <div
+        class="grid gap-10 lg:gap-14
+               grid-cols-1 sm:grid-cols-2
+               max-w-4xl mx-auto"
+      >
+
+        <!-- EFFECTS -->
+        <a
+          href="/wiki/effects"
+          class="group block p-8 rounded-3xl 
+                 bg-white/10 dark:bg-white/5 
+                 border border-white/10 backdrop-blur-xl shadow-xl
+                 hover:-translate-y-1 hover:shadow-2xl 
+                 transition-all duration-300"
+        >
+          <div class="flex items-center gap-4 mb-4">
+
+            <!-- Inline brain SVG -->
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              class="w-10 h-10 opacity-70 group-hover:opacity-90 transition"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+            >
+              <path d="M12 5a3 3 0 1 0-6 0c0 1 .5 1.5 1 2-1 0-2 .5-2 2a3 3 0 1 0 3 3"/>
+              <path d="M12 5a3 3 0 1 1 6 0c0 1-.5 1.5-1 2 1 0 2 .5 2 2a3 3 0 1 1-3 3"/>
+              <path d="M12 5v14"/>
+            </svg>
+
+            <h2 class="text-2xl font-semibold">
+              Psychoactive Effects
+            </h2>
           </div>
-        </section>
-      ))}
-    </div>
-  </main>
 
+          <p class="opacity-75 leading-relaxed text-sm">
+            A structured taxonomy of sensory, cognitive, physical and
+            experiential psychoactive effects.
+          </p>
+        </a>
+
+        <!-- PSYCHOACTIVES -->
+        <a
+          href="/wiki/psychoactives"
+          class="group block p-8 rounded-3xl 
+                 bg-white/10 dark:bg-white/5 
+                 border border-white/10 backdrop-blur-xl shadow-xl
+                 hover:-translate-y-1 hover:shadow-2xl 
+                 transition-all duration-300"
+        >
+          <div class="flex items-center gap-4 mb-4">
+
+            <!-- Inline molecule SVG -->
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              class="w-10 h-10 opacity-70 group-hover:opacity-90 transition"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 0-3"/>
+              <path d="M4.6 15a1.65 1.65 0 0 1 0-3"/>
+              <path d="M12 5.6a1.65 1.65 0 0 1 0-3"/>
+              <path d="M12 21.4a1.65 1.65 0 0 0 0-3"/>
+            </svg>
+
+            <h2 class="text-2xl font-semibold">
+              Psychoactives
+            </h2>
+          </div>
+
+          <p class="opacity-75 leading-relaxed text-sm">
+            Explore chemical families, plants, and preparations that alter consciousness.
+          </p>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- FOOTNOTE -->
+    <section class="mt-24 border-t border-white/10 pt-14 text-center opacity-70">
+      <p class="text-sm tracking-wide">
+        More categories coming soon — cognition, models, maps, protocols, and research.
+      </p>
+    </section>
+
+  </main>
 </BaseLayout>

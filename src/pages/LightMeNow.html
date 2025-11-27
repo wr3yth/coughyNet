@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hue Light</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      background-color: hsl(0, 100%, 50%);
+      overflow: hidden;
+    }
+
+    #controls {
+      position: fixed;
+      bottom: 2%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 6px 12px;
+      border-radius: 10px;
+      backdrop-filter: blur(6px);
+    }
+
+    input[type="range"] {
+      width: 100px;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px;
+      background: linear-gradient(to right,
+        hsl(0, 100%, 50%), hsl(60, 100%, 50%),
+        hsl(120, 100%, 50%), hsl(180, 100%, 50%),
+        hsl(240, 100%, 50%), hsl(300, 100%, 50%), hsl(360, 100%, 50%)
+      );
+      border-radius: 3px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: white;
+      border: 1px solid #000;
+      margin-top: -3px;
+    }
+
+    button {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <input type="range" id="hue" min="0" max="360" value="0" />
+    <button id="animate">▶</button>
+    <input type="range" id="speed" min="1" max="100" value="30" />
+  </div>
+
+  <script>
+    const hue = document.getElementById("hue");
+    const speed = document.getElementById("speed");
+    const animateBtn = document.getElementById("animate");
+
+    let animation = null;
+    let hueValue = 0;
+
+    function updateColor() {
+      document.body.style.backgroundColor = `hsl(${hueValue}, 100%, 50%)`;
+    }
+
+    hue.addEventListener("input", () => {
+      hueValue = parseInt(hue.value);
+      updateColor();
+    });
+
+    animateBtn.addEventListener("click", () => {
+      if (animation) {
+        cancelAnimationFrame(animation);
+        animation = null;
+        animateBtn.textContent = "▶";
+      } else {
+        animateBtn.textContent = "⏸";
+        animateLoop();
+      }
+    });
+
+    function animateLoop() {
+      hueValue = (hueValue + speed.value / 50) % 360;
+      hue.value = hueValue;
+      updateColor();
+      animation = requestAnimationFrame(animateLoop);
+    }
+
+    updateColor();
+  </script>
+</body>
+</html>

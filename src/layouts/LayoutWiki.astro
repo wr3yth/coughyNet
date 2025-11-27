@@ -42,11 +42,14 @@ const {
     <Background />
     <Header lang={lang}/>
 
-    <main class="px-4 pt-20 pb-20 max-w-3xl mx-auto text-neutral-800 dark:text-neutral-100 leading-relaxed">
-      
-
-      <slot />
-
-    </main>
+  <main
+    class={[
+      "pt-20 pb-20",
+      "text-neutral-800 dark:text-neutral-100 leading-relaxed",
+      pageClass
+    ].join(" ")}
+  >
+    <slot />
+ </main>
   </body>
 </html>

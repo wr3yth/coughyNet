@@ -59,27 +59,29 @@ const storiesFa = defineCollection({
 });
 
 const wiki = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/wiki" }),
+  loader: glob({
+    pattern: "**/*.md",
+    base: "./src/wiki",
+    entries: true,
+  }),
   schema: z.object({
-    title: z.string(),
+    title: z.string().optional(),          // ⭐ FIXED
     description: z.string().optional(),
-    category: z.string().optional(),   // perception, states, tools...
-    tags: z.array(z.string()).optional(),
-    image: z.string().optional(),
   }),
 });
 
 const wikiFa = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/wiki" }),
+  loader: glob({
+    pattern: "**/*.fa.md",                 // ⭐ FIXED (FA only)
+    base: "./src/wiki",
+  }),
   schema: z.object({
-    title: z.string(),
+    title: z.string().optional(),
     description: z.string().optional(),
-    category: z.string().optional(),
     tags: z.array(z.string()).optional(),
     image: z.string().optional(),
   }),
 });
-
 
 
 

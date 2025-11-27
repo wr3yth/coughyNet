@@ -10,7 +10,7 @@ export const navLinks: [string, string][] = [
 ]as const;
  
 export const wikiLinks: [string, string][] = [
-  ["Substances", "/wiki/substances"],
+  ["Psychoactives", "/wiki/psychoactives"],
   ["Effects", "/wiki/effects"],
   ["Interactions", "/wiki/interactions"],
   ["Harm Reduction", "/wiki/harm_reduction"],
