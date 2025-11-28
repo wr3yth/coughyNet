@@ -3,9 +3,9 @@ title: '1cP-AL-LAD'
 slug: "1cp-al-lad"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # 1cP-AL-LAD

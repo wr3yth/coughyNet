@@ -3,9 +3,9 @@ title: '2C-E'
 slug: "2c-e"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # 2C-E

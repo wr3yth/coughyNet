@@ -3,9 +3,9 @@ title: 'S-Adenosyl methionine'
 slug: "s-adenosyl-methionine"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # S-Adenosyl methionine

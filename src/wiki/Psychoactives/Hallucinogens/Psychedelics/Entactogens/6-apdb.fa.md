@@ -3,9 +3,9 @@ title: '6-APDB'
 slug: "6-apdb"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # 6-APDB

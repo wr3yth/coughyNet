@@ -3,9 +3,9 @@ title: 'Muscimol'
 slug: "muscimol"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # Muscimol

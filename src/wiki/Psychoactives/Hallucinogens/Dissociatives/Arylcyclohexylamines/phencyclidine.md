@@ -3,7 +3,7 @@ title: 'Phencyclidine'
 
 lang: "en"
 
-summary: ''
+
 ---
 
 # Phencyclidine

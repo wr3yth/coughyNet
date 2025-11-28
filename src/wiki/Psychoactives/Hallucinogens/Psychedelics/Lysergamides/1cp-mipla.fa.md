@@ -3,9 +3,9 @@ title: '1cP-MiPLA'
 slug: "1cp-mipla"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # 1cP-MiPLA

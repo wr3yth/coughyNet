@@ -3,9 +3,9 @@ title: 'Gabapentinoids'
 slug: "gabapentinoids"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # Gabapentinoids

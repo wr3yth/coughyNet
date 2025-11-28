@@ -2,9 +2,9 @@
 title: 'DPT'
 slug: "dpt"
 lang: "en"
-weight: 1000
-template: "wiki"
-summary: "tryptamines"
+
+
+
 ---
 
 # DPT

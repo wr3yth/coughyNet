@@ -2,9 +2,9 @@
 title: 'DET'
 slug: "det"
 lang: "en"
-weight: 1000
-template: "wiki"
-summary: "tryptamines"
+
+
+
 ---
 
 # DET

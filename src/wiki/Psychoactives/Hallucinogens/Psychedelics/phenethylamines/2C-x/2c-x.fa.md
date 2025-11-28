@@ -3,9 +3,9 @@ title: '2C-x'
 slug: "2c-x"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # 2C-x

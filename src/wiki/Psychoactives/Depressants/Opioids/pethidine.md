@@ -3,9 +3,9 @@ title: 'Pethidine'
 slug: "pethidine"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # Pethidine

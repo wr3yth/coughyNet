@@ -3,9 +3,9 @@ title: 'Polysubstance combinations'
 slug: "polysubstance-combinations"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # Polysubstance combinations

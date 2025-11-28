@@ -3,9 +3,9 @@ title: 'Cannabis'
 slug: "cannabis"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # Cannabis

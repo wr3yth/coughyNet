@@ -3,9 +3,9 @@ title: 'F-Phenibut'
 slug: "f-phenibut"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # F-Phenibut

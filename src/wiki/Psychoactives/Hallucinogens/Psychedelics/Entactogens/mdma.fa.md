@@ -3,9 +3,9 @@ title: 'MDMA'
 slug: "mdma"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # MDMA

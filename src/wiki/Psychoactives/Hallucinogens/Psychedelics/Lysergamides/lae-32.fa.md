@@ -3,9 +3,9 @@ title: 'LAE-32'
 slug: "lae-32"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # LAE-32

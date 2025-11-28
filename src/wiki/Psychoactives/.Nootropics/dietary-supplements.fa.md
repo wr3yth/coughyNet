@@ -3,9 +3,9 @@ title: 'Dietary supplements'
 slug: "dietary-supplements"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # Dietary supplements

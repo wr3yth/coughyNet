@@ -3,9 +3,9 @@ title: '5-MeO-DiBF'
 slug: "5-meo-dibf"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # 5-MeO-DiBF

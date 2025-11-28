@@ -3,9 +3,9 @@ title: 'Salvinorin B methoxymethyl ether'
 slug: "salvinorin-b-methoxymethyl-ether"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # Salvinorin B methoxymethyl ether

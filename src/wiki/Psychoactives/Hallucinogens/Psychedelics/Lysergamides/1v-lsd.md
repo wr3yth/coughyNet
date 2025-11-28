@@ -3,9 +3,9 @@ title: '1V-LSD'
 slug: "1v-lsd"
 lang: "en"
 
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # 1V-LSD

@@ -2,9 +2,9 @@
 title: 'DOI'
 slug: "doi"
 lang: "en"
-weight: 1000
-template: "wiki"
-summary: ''
+
+
+
 ---
 
 # DOI
