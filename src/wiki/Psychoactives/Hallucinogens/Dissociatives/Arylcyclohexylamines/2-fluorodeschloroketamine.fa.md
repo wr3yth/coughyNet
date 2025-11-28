@@ -2,7 +2,7 @@
 title: '2-Fluorodeschloroketamine'
 slug: "2-fluorodeschloroketamine"
 lang: "en"
-category: 'Dissociatives'
+
 weight: 1000
 template: "wiki"
 summary: ''

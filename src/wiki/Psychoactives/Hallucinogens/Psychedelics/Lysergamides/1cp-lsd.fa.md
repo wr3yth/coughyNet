@@ -2,7 +2,7 @@
 title: '1cP-LSD'
 slug: "1cp-lsd"
 lang: "en"
-category: 'Lysergamides'
+
 weight: 1000
 template: "wiki"
 summary: ''

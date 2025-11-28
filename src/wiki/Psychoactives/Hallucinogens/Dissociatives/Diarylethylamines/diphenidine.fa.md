@@ -2,7 +2,7 @@
 title: 'Diphenidine'
 slug: "diphenidine"
 lang: "en"
-category: 'Dissociatives'
+
 weight: 1000
 template: "wiki"
 summary: ''

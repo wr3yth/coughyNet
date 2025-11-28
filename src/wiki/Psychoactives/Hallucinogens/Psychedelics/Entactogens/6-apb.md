@@ -2,7 +2,7 @@
 title: '6-APB'
 slug: "6-apb"
 lang: "en"
-category: 'Empathogens'
+
 weight: 1000
 template: "wiki"
 summary: ''

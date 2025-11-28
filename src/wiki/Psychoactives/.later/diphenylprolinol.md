@@ -1,0 +1,1 @@
+# These are not classical “stimulants” but NDRI-type prolinol derivatives.

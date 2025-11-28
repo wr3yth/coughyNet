@@ -1,11 +1,7 @@
 ---
 title: '5-APB'
-slug: "5-apb"
-lang: "en"
-category: 'Empathogens'
-weight: 1000
-template: "wiki"
-summary: ''
+lang: "fa"
+
 ---
 
 # 5-APB

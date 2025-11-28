@@ -2,7 +2,7 @@
 title: '5-MAPB'
 slug: "5-mapb"
 lang: "en"
-category: 'Empathogens'
+
 weight: 1000
 template: "wiki"
 summary: ''
